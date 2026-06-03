@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const API_URL = 'https://moncho-api-production-2c00.up.railway.app'
 
@@ -33,6 +33,16 @@ export default function GeneratorPage() {
   const [progress, setProgress] = useState([])
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+  async function checkAuth() {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+      window.location.href = '/login'
+    }
+  }
+  checkAuth()
+}, [])
 
   function toggleSubject(id) {
     setForm(f => ({
