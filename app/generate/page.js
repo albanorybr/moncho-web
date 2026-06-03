@@ -91,10 +91,23 @@ export default function GeneratorPage() {
           }
 
           if (statusData.status === 'done') {
-            clearInterval(poll)
-            setResult(statusData.result)
-            setStatus('done')
-          } else if (statusData.status === 'error') {
+  clearInterval(poll)
+  setResult(statusData.result)
+  setStatus('done')
+  
+  // Save study to Supabase
+  const { data: { session } } = await supabase.auth.getSession()
+  if (session) {
+    await supabase.from('studies').insert({
+      user_id: session.user.id,
+      theme: form.theme,
+      language: form.language,
+      subjects: statusData.result.subjects_included,
+      creative_angle: statusData.result.creative_angle,
+      output: statusData.result.output,
+    })
+  }
+} else if (statusData.status === 'error') {
             clearInterval(poll)
             setError(statusData.error || 'Something went wrong.')
             setStatus('error')
