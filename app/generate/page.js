@@ -1,5 +1,6 @@
 'use client'
 
+import { supabase } from '../lib/supabase'
 import { useState, useEffect } from 'react'
 
 const API_URL = 'https://moncho-api-production-2c00.up.railway.app'
@@ -29,20 +30,20 @@ export default function GeneratorPage() {
     subjects_available: SUBJECTS.map(s => s.id),
   })
 
-  const [status, setStatus] = useState('idle') // idle | loading | polling | done | error
+  const [status, setStatus] = useState('idle')
   const [progress, setProgress] = useState([])
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
 
   useEffect(() => {
-  async function checkAuth() {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) {
-      window.location.href = '/login'
+    async function checkAuth() {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        window.location.href = '/login'
+      }
     }
-  }
-  checkAuth()
-}, [])
+    checkAuth()
+  }, [])
 
   function toggleSubject(id) {
     setForm(f => ({
@@ -64,7 +65,6 @@ export default function GeneratorPage() {
     setResult(null)
 
     try {
-      // Start the job
       const res = await fetch(`${API_URL}/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -81,7 +81,6 @@ export default function GeneratorPage() {
 
       setStatus('polling')
 
-      // Poll for result
       const poll = setInterval(async () => {
         try {
           const statusRes = await fetch(`${API_URL}/status/${jobId}`)
@@ -101,7 +100,7 @@ export default function GeneratorPage() {
             setStatus('error')
           }
         } catch (e) {
-          // ignore poll errors, keep trying
+          // ignore poll errors
         }
       }, 3000)
 
@@ -109,6 +108,11 @@ export default function GeneratorPage() {
       setError('Could not connect to the API. Please try again.')
       setStatus('error')
     }
+  }
+
+  async function handleLogout() {
+    await supabase.auth.signOut()
+    window.location.href = '/login'
   }
 
   return (
@@ -130,8 +134,25 @@ export default function GeneratorPage() {
         <a href="/" style={{ fontSize: '20px', fontWeight: 700, color: '#1D9E75', textDecoration: 'none' }}>
           🐱 Moncho
         </a>
-        <div style={{ fontSize: '14px', color: '#5F5E5A' }}>
-          Unit Study Generator
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <span style={{ fontSize: '14px', color: '#5F5E5A' }}>
+            Unit Study Generator
+          </span>
+          <button
+            onClick={handleLogout}
+            style={{
+              background: 'none',
+              border: '1px solid #E8E4DC',
+              borderRadius: '100px',
+              padding: '8px 16px',
+              fontSize: '13px',
+              color: '#5F5E5A',
+              cursor: 'pointer',
+              fontFamily: 'Georgia, serif',
+            }}
+          >
+            Log out
+          </button>
         </div>
       </nav>
 
@@ -150,7 +171,6 @@ export default function GeneratorPage() {
           Fill in the details below and Moncho will create a complete unit study for your child.
         </p>
 
-        {/* FORM */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
           {/* Theme */}
@@ -182,7 +202,7 @@ export default function GeneratorPage() {
             )}
           </div>
 
-          {/* Age + Language row */}
+          {/* Age + Language */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             <div>
               <label style={{ display: 'block', fontWeight: 700, marginBottom: '8px', fontSize: '15px' }}>
@@ -192,13 +212,9 @@ export default function GeneratorPage() {
                 value={form.age}
                 onChange={e => setForm(f => ({ ...f, age: e.target.value }))}
                 style={{
-                  width: '100%',
-                  padding: '14px 16px',
-                  borderRadius: '12px',
-                  border: '2px solid #E8E4DC',
-                  fontSize: '15px',
-                  background: 'white',
-                  fontFamily: 'Georgia, serif',
+                  width: '100%', padding: '14px 16px', borderRadius: '12px',
+                  border: '2px solid #E8E4DC', fontSize: '15px',
+                  background: 'white', fontFamily: 'Georgia, serif',
                 }}
               >
                 {[5,6,7,8,9,10,11,12,13,14,15,16].map(a => (
@@ -214,13 +230,9 @@ export default function GeneratorPage() {
                 value={form.language}
                 onChange={e => setForm(f => ({ ...f, language: e.target.value }))}
                 style={{
-                  width: '100%',
-                  padding: '14px 16px',
-                  borderRadius: '12px',
-                  border: '2px solid #E8E4DC',
-                  fontSize: '15px',
-                  background: 'white',
-                  fontFamily: 'Georgia, serif',
+                  width: '100%', padding: '14px 16px', borderRadius: '12px',
+                  border: '2px solid #E8E4DC', fontSize: '15px',
+                  background: 'white', fontFamily: 'Georgia, serif',
                 }}
               >
                 <option value="English">English</option>
@@ -229,7 +241,7 @@ export default function GeneratorPage() {
             </div>
           </div>
 
-          {/* Mode + Depth row */}
+          {/* Mode + Depth */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             <div>
               <label style={{ display: 'block', fontWeight: 700, marginBottom: '8px', fontSize: '15px' }}>
@@ -239,13 +251,9 @@ export default function GeneratorPage() {
                 value={form.mode}
                 onChange={e => setForm(f => ({ ...f, mode: e.target.value }))}
                 style={{
-                  width: '100%',
-                  padding: '14px 16px',
-                  borderRadius: '12px',
-                  border: '2px solid #E8E4DC',
-                  fontSize: '15px',
-                  background: 'white',
-                  fontFamily: 'Georgia, serif',
+                  width: '100%', padding: '14px 16px', borderRadius: '12px',
+                  border: '2px solid #E8E4DC', fontSize: '15px',
+                  background: 'white', fontFamily: 'Georgia, serif',
                 }}
               >
                 <option value="mini">Mini (3 subjects)</option>
@@ -261,13 +269,9 @@ export default function GeneratorPage() {
                 value={form.depth}
                 onChange={e => setForm(f => ({ ...f, depth: e.target.value }))}
                 style={{
-                  width: '100%',
-                  padding: '14px 16px',
-                  borderRadius: '12px',
-                  border: '2px solid #E8E4DC',
-                  fontSize: '15px',
-                  background: 'white',
-                  fontFamily: 'Georgia, serif',
+                  width: '100%', padding: '14px 16px', borderRadius: '12px',
+                  border: '2px solid #E8E4DC', fontSize: '15px',
+                  background: 'white', fontFamily: 'Georgia, serif',
                 }}
               >
                 <option value="light">Light (2-3 subtopics)</option>
@@ -299,7 +303,6 @@ export default function GeneratorPage() {
                       fontSize: '14px',
                       cursor: 'pointer',
                       fontFamily: 'Georgia, serif',
-                      transition: 'all 0.15s',
                     }}
                   >
                     {s.emoji} {s.id}
@@ -315,20 +318,15 @@ export default function GeneratorPage() {
               💬 Parent note <span style={{ color: '#5F5E5A', fontWeight: 400 }}>(optional)</span>
             </label>
             <textarea
-              placeholder="e.g. She loves building things but hates writing. He's really into Minecraft..."
+              placeholder="e.g. She loves building things but hates writing..."
               value={form.parent_note}
               onChange={e => setForm(f => ({ ...f, parent_note: e.target.value }))}
               rows={3}
               style={{
-                width: '100%',
-                padding: '14px 16px',
-                borderRadius: '12px',
-                border: '2px solid #E8E4DC',
-                fontSize: '15px',
-                fontFamily: 'Georgia, serif',
-                background: 'white',
-                resize: 'vertical',
-                boxSizing: 'border-box',
+                width: '100%', padding: '14px 16px', borderRadius: '12px',
+                border: '2px solid #E8E4DC', fontSize: '15px',
+                fontFamily: 'Georgia, serif', background: 'white',
+                resize: 'vertical', boxSizing: 'border-box',
               }}
             />
           </div>
@@ -339,15 +337,10 @@ export default function GeneratorPage() {
             disabled={status === 'loading' || status === 'polling'}
             style={{
               background: status === 'loading' || status === 'polling' ? '#5F5E5A' : '#1D9E75',
-              color: 'white',
-              padding: '18px',
-              borderRadius: '100px',
-              border: 'none',
-              fontSize: '18px',
-              fontWeight: 700,
+              color: 'white', padding: '18px', borderRadius: '100px',
+              border: 'none', fontSize: '18px', fontWeight: 700,
               cursor: status === 'loading' || status === 'polling' ? 'not-allowed' : 'pointer',
               fontFamily: 'Georgia, serif',
-              transition: 'background 0.2s',
             }}
           >
             {status === 'loading' ? '🚀 Starting generation...' :
@@ -359,11 +352,8 @@ export default function GeneratorPage() {
         {/* PROGRESS */}
         {(status === 'polling' || status === 'loading') && (
           <div style={{
-            marginTop: '32px',
-            background: 'white',
-            borderRadius: '16px',
-            padding: '24px',
-            border: '1px solid #E8E4DC',
+            marginTop: '32px', background: 'white', borderRadius: '16px',
+            padding: '24px', border: '1px solid #E8E4DC',
           }}>
             <p style={{ fontWeight: 700, marginBottom: '12px', color: '#1A1A1A' }}>
               🐱 Moncho is working on it...
@@ -382,11 +372,8 @@ export default function GeneratorPage() {
         {status === 'done' && result && (
           <div style={{ marginTop: '40px' }}>
             <div style={{
-              background: '#E8F7F2',
-              borderRadius: '16px',
-              padding: '24px',
-              marginBottom: '24px',
-              border: '2px solid #1D9E75',
+              background: '#E8F7F2', borderRadius: '16px', padding: '24px',
+              marginBottom: '24px', border: '2px solid #1D9E75',
             }}>
               <p style={{ fontWeight: 700, color: '#085041', fontSize: '18px', marginBottom: '8px' }}>
                 🎉 Your unit study is ready!
@@ -400,17 +387,10 @@ export default function GeneratorPage() {
             </div>
 
             <div style={{
-              background: 'white',
-              borderRadius: '16px',
-              padding: '32px',
-              border: '1px solid #E8E4DC',
-              whiteSpace: 'pre-wrap',
-              fontFamily: 'Georgia, serif',
-              fontSize: '14px',
-              lineHeight: '1.8',
-              color: '#1A1A1A',
-              maxHeight: '500px',
-              overflowY: 'auto',
+              background: 'white', borderRadius: '16px', padding: '32px',
+              border: '1px solid #E8E4DC', whiteSpace: 'pre-wrap',
+              fontFamily: 'Georgia, serif', fontSize: '14px', lineHeight: '1.8',
+              color: '#1A1A1A', maxHeight: '500px', overflowY: 'auto',
             }}>
               {result.output}
             </div>
@@ -425,15 +405,9 @@ export default function GeneratorPage() {
                 a.click()
               }}
               style={{
-                marginTop: '16px',
-                background: '#1D9E75',
-                color: 'white',
-                padding: '14px 32px',
-                borderRadius: '100px',
-                border: 'none',
-                fontSize: '16px',
-                fontWeight: 700,
-                cursor: 'pointer',
+                marginTop: '16px', background: '#1D9E75', color: 'white',
+                padding: '14px 32px', borderRadius: '100px', border: 'none',
+                fontSize: '16px', fontWeight: 700, cursor: 'pointer',
                 fontFamily: 'Georgia, serif',
               }}
             >
