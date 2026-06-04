@@ -166,6 +166,11 @@ export default function GeneratorPage() {
           >
             Log out
           </button>
+          <a href="/dashboard" style={{
+  fontSize: '14px', color: '#5F5E5A', textDecoration: 'none'
+}}>
+  My Studies
+</a>
         </div>
       </nav>
 
