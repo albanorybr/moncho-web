@@ -429,24 +429,56 @@ export default function GeneratorPage() {
               {result.output}
             </div>
 
-            <button
-              onClick={() => {
-                const blob = new Blob([result.output], { type: 'text/plain' })
-                const url = URL.createObjectURL(blob)
-                const a = document.createElement('a')
-                a.href = url
-                a.download = `Moncho_${form.theme}_Unit_Study.txt`
-                a.click()
-              }}
-              style={{
-                marginTop: '16px', background: '#1D9E75', color: 'white',
-                padding: '14px 32px', borderRadius: '100px', border: 'none',
-                fontSize: '16px', fontWeight: 700, cursor: 'pointer',
-                fontFamily: 'Georgia, serif',
-              }}
-            >
-              📥 Download as Text
-            </button>
+            <div style={{ display: 'flex', gap: '12px', marginTop: '16px', flexWrap: 'wrap' }}>
+  <button
+    onClick={() => {
+      const blob = new Blob([result.output], { type: 'text/plain' })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `Moncho_${form.theme}_Unit_Study.txt`
+      a.click()
+    }}
+    style={{
+      background: '#F7F4EF', color: '#1A1A1A',
+      padding: '14px 24px', borderRadius: '100px',
+      border: '1px solid #E8E4DC', fontSize: '15px',
+      fontWeight: 600, cursor: 'pointer',
+      fontFamily: 'Georgia, serif',
+    }}
+  >
+    📄 Download as Text
+  </button>
+
+  <button
+    onClick={async () => {
+      try {
+        const res = await fetch(`${API_URL}/generate-pdf`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(form),
+        })
+        const blob = await res.blob()
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `Moncho_${form.theme}_Unit_Study.pdf`
+        a.click()
+      } catch (e) {
+        alert('PDF generation failed. Please try again.')
+      }
+    }}
+    style={{
+      background: '#1D9E75', color: 'white',
+      padding: '14px 24px', borderRadius: '100px',
+      border: 'none', fontSize: '15px',
+      fontWeight: 700, cursor: 'pointer',
+      fontFamily: 'Georgia, serif',
+    }}
+  >
+    📥 Download PDF
+  </button>
+</div>
           </div>
         )}
 
