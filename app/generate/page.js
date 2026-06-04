@@ -35,15 +35,31 @@ export default function GeneratorPage() {
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
 
-  useEffect(() => {
-    async function checkAuth() {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        window.location.href = '/login'
-      }
+ useEffect(() => {
+  async function checkAuth() {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+      window.location.href = '/login'
+      return
     }
-    checkAuth()
-  }, [])
+
+    // Check generation count this month
+    const startOfMonth = new Date()
+    startOfMonth.setDate(1)
+    startOfMonth.setHours(0, 0, 0, 0)
+
+    const { count } = await supabase
+      .from('studies')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', session.user.id)
+      .gte('created_at', startOfMonth.toISOString())
+
+    if (count >= 2) {
+      setError('You have reached your free limit of 2 studies this month. Upgrade to Pro for unlimited studies!')
+    }
+  }
+  checkAuth()
+}, [])
 
   function toggleSubject(id) {
     setForm(f => ({
@@ -352,7 +368,7 @@ export default function GeneratorPage() {
           {/* Generate button */}
           <button
             onClick={handleGenerate}
-            disabled={status === 'loading' || status === 'polling'}
+            disabled={status === 'loading' || status === 'polling' || !!error}
             style={{
               background: status === 'loading' || status === 'polling' ? '#5F5E5A' : '#1D9E75',
               color: 'white', padding: '18px', borderRadius: '100px',
