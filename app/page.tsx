@@ -31,15 +31,24 @@ export default function Home() {
         </div>
         <div style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
           <a href="/pricing" style={{ color: '#5F5E5A', textDecoration: 'none', fontSize: '15px' }}>Pricing</a>
-          <a href="/login" style={{
-            background: '#1D9E75',
-            color: 'white',
-            padding: '10px 24px',
-            borderRadius: '100px',
-            textDecoration: 'none',
-            fontSize: '15px',
-            fontWeight: 600,
-          }}>Get Started</a>
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+  <a href="/dashboard" style={{ 
+    color: '#5F5E5A', 
+    textDecoration: 'none', 
+    fontSize: '15px' 
+  }}>
+    My Studies
+  </a>
+  <a href="/login" style={{
+    background: '#1D9E75',
+    color: 'white',
+    padding: '10px 24px',
+    borderRadius: '100px',
+    textDecoration: 'none',
+    fontSize: '15px',
+    fontWeight: 600,
+  }}>Get Started</a>
+</div>
         </div>
       </nav>
 
