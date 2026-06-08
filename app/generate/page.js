@@ -452,22 +452,27 @@ export default function GeneratorPage() {
 
   <button
     onClick={async () => {
-      try {
-        const res = await fetch(`${API_URL}/generate-pdf`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(form),
-        })
-        const blob = await res.blob()
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = `Moncho_${form.theme}_Unit_Study.pdf`
-        a.click()
-      } catch (e) {
-        alert('PDF generation failed. Please try again.')
-      }
-    }}
+  try {
+    const res = await fetch(`${API_URL}/generate-pdf`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...form,
+        output: result.output,
+        creative_angle: result.creative_angle,
+        subjects_included: result.subjects_included,
+      }),
+    })
+    const blob = await res.blob()
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `Moncho_${form.theme}_Unit_Study.pdf`
+    a.click()
+  } catch (e) {
+    alert('PDF generation failed. Please try again.')
+  }
+}}
     style={{
       background: '#1D9E75', color: 'white',
       padding: '14px 24px', borderRadius: '100px',
