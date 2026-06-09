@@ -54,7 +54,7 @@ export default function GeneratorPage() {
       .eq('user_id', session.user.id)
       .gte('created_at', startOfMonth.toISOString())
 
-    if (count >= 2) {
+    if (count >= 999) {
       setError('You have reached your free limit of 2 studies this month. Upgrade to Pro for unlimited studies!')
     }
   }
@@ -451,38 +451,126 @@ export default function GeneratorPage() {
   </button>
 
   <button
-    onClick={async () => {
-  try {
-    const res = await fetch(`${API_URL}/generate-pdf`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...form,
-        output: result.output,
-        creative_angle: result.creative_angle,
-        subjects_included: result.subjects_included,
-      }),
-    })
-    const blob = await res.blob()
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `Moncho_${form.theme}_Unit_Study.pdf`
-    a.click()
-  } catch (e) {
-    alert('PDF generation failed. Please try again.')
-  }
+  onClick={() => {
+  const printWindow = window.open('', '_blank')
+  printWindow.document.write(`
+    <html>
+      <head>
+        <title>Moncho - ${form.theme} Unit Study</title>
+        <style>
+          * { box-sizing: border-box; margin: 0; padding: 0; }
+          body { 
+            font-family: Georgia, serif; 
+            max-width: 750px; 
+            margin: 40px auto; 
+            padding: 20px; 
+            line-height: 1.8; 
+            color: #1A1A1A;
+            background: #F7F4EF;
+          }
+          .header {
+            background: #085041;
+            color: white;
+            padding: 32px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+            text-align: center;
+          }
+          .header h1 { font-size: 36px; margin-bottom: 8px; }
+          .header p { color: rgba(255,255,255,0.8); font-size: 14px; }
+          .section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border-left: 6px solid #1D9E75;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+          }
+          .section h2 {
+            color: #085041;
+            font-size: 22px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #E8F7F2;
+          }
+          .challenge {
+            background: #F7F4EF;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 12px 0;
+            border-left: 4px solid #1D9E75;
+          }
+          .challenge h3 {
+            color: #1D9E75;
+            font-size: 16px;
+            margin-bottom: 8px;
+          }
+          .easier { 
+            color: #085041; 
+            font-style: italic;
+            margin-top: 8px;
+            padding: 8px;
+            background: #E8F7F2;
+            border-radius: 6px;
+          }
+          .harder { 
+            color: #7D3C98; 
+            font-style: italic;
+            margin-top: 6px;
+            padding: 8px;
+            background: #F5EEF8;
+            border-radius: 6px;
+          }
+          .divider {
+            border: none;
+            border-top: 2px solid #E8E4DC;
+            margin: 20px 0;
+          }
+          pre { 
+            white-space: pre-wrap; 
+            font-family: Georgia, serif;
+            font-size: 14px;
+            line-height: 1.8;
+          }
+          .footer {
+            text-align: center;
+            color: #5F5E5A;
+            font-size: 12px;
+            margin-top: 32px;
+            padding-top: 16px;
+            border-top: 1px solid #E8E4DC;
+          }
+          @media print {
+            body { background: white; margin: 20px; }
+            .section { box-shadow: none; }
+          }
+          .divider {
+            border: none;
+            border-top: 3px solid #1D9E75;
+            margin: 28px 0;
+            opacity: 0.4;
+        }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>🐱 ${form.theme}</h1>
+          <p>Moncho Unschooling · Unit Study · ${form.language}</p>
+          <p style="margin-top:8px; font-style:italic; color:rgba(255,255,255,0.9)">"${result.creative_angle}"</p>
+        </div>
+        <pre>${result.output.replace(/---/g, '</pre><hr style="border:none;border-top:3px solid #1D9E75;margin:28px 0;opacity:0.4"><pre>')}</pre>
+        <div class="footer">
+          By Alba Nory de González · Moncho Unschooling · monchounschooling.com
+        </div>
+      </body>
+    </html>
+  `)
+  printWindow.document.close()
+  printWindow.print()
 }}
-    style={{
-      background: '#1D9E75', color: 'white',
-      padding: '14px 24px', borderRadius: '100px',
-      border: 'none', fontSize: '15px',
-      fontWeight: 700, cursor: 'pointer',
-      fontFamily: 'Georgia, serif',
-    }}
-  >
-    📥 Download PDF
-  </button>
+>
+  📥 Download PDF
+</button>
 </div>
           </div>
         )}
