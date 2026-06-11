@@ -428,7 +428,9 @@ export default function GeneratorPage() {
       background: '#F7F4EF', borderRadius: '10px',
       fontSize: '12px', color: '#5F5E5A', fontStyle: 'italic',
     }}>
-      💡
+      💡 Fun fact: The average unit study takes 4-6 hours to create from scratch.
+      Moncho does it in minutes — so you can spend that time actually exploring with your child! 🌍
+    </div>
   </div>
 )}
 
