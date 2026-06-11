@@ -43,19 +43,30 @@ export default function GeneratorPage() {
       return
     }
 
-    // Check generation count this month
-    const startOfMonth = new Date()
-    startOfMonth.setDate(1)
-    startOfMonth.setHours(0, 0, 0, 0)
+    // Check user plan
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('plan')
+      .eq('id', session.user.id)
+      .single()
 
-    const { count } = await supabase
-      .from('studies')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', session.user.id)
-      .gte('created_at', startOfMonth.toISOString())
+    const isPro = profile?.plan === 'pro'
 
-    if (count >= 999) {
-      setError('You have reached your free limit of 2 studies this month. Upgrade to Pro for unlimited studies!')
+    if (!isPro) {
+      // Check generation count this month
+      const startOfMonth = new Date()
+      startOfMonth.setDate(1)
+      startOfMonth.setHours(0, 0, 0, 0)
+
+      const { count } = await supabase
+        .from('studies')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', session.user.id)
+        .gte('created_at', startOfMonth.toISOString())
+
+      if (count >= 999) {
+        setError('🌟 You have used your 2 free studies this month. Upgrade to Pro for unlimited studies!')
+      }
     }
   }
   checkAuth()
@@ -383,24 +394,32 @@ export default function GeneratorPage() {
           </button>
         </div>
 
-        {/* PROGRESS */}
-        {(status === 'polling' || status === 'loading') && (
-          <div style={{
-            marginTop: '32px', background: 'white', borderRadius: '16px',
-            padding: '24px', border: '1px solid #E8E4DC',
-          }}>
-            <p style={{ fontWeight: 700, marginBottom: '12px', color: '#1A1A1A' }}>
-              🐱 Moncho is working on it...
-            </p>
-            {progress.length > 0 ? progress.map((p, i) => (
-              <p key={i} style={{ color: '#1D9E75', fontSize: '14px', marginBottom: '4px' }}>
-                ✅ {p}
-              </p>
-            )) : (
-              <p style={{ color: '#5F5E5A', fontSize: '14px' }}>Starting up the agents...</p>
-            )}
-          </div>
-        )}
+       {/* PROGRESS */}
+{(status === 'polling' || status === 'loading') && (
+  <div style={{
+    marginTop: '32px', background: 'white',
+    borderRadius: '16px', padding: '24px',
+    border: '1px solid #E8E4DC',
+  }}>
+    <p style={{ fontWeight: 700, marginBottom: '8px', color: '#1A1A1A', fontSize: '16px' }}>
+      🐱 Moncho is creating your unit study...
+    </p>
+    <p style={{ color: '#5F5E5A', fontSize: '14px', marginBottom: '16px' }}>
+      This usually takes 1-2 minutes. Please don't close this window!
+    </p>
+    {progress.length > 0 ? progress.map((p, i) => (
+      <p key={i} style={{ color: '#1D9E75', fontSize: '14px', marginBottom: '4px' }}>
+        ✅ {p}
+      </p>
+    )) : (
+      <div>
+        <p style={{ color: '#5F5E5A', fontSize: '13px', marginBottom: '4px' }}>⏳ Starting the agents...</p>
+        <p style={{ color: '#5F5E5A', fontSize: '13px', marginBottom: '4px' }}>📚 Planning your subjects...</p>
+        <p style={{ color: '#5F5E5A', fontSize: '13px' }}>✍️ Writing your challenges...</p>
+      </div>
+    )}
+  </div>
+)}
 
         {/* RESULT */}
         {status === 'done' && result && (
