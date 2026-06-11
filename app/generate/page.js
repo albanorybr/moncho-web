@@ -243,8 +243,24 @@ export default function GeneratorPage() {
               onBlur={e => e.target.style.borderColor = '#E8E4DC'}
             />
             {error && (
-              <p style={{ color: '#E8522A', fontSize: '14px', marginTop: '6px' }}>{error}</p>
-            )}
+  <div style={{ marginTop: '8px' }}>
+    <p style={{ color: '#E8522A', fontSize: '14px', marginBottom: '12px' }}>{error}</p>
+    {error.includes('Upgrade to Pro') && (
+      <a href="/pricing" style={{
+        display: 'inline-block',
+        background: '#1D9E75',
+        color: 'white',
+        padding: '12px 24px',
+        borderRadius: '100px',
+        textDecoration: 'none',
+        fontSize: '15px',
+        fontWeight: 700,
+      }}>
+        🌟 Upgrade to Pro →
+      </a>
+    )}
+  </div>
+)}
           </div>
 
           {/* Age + Language */}
