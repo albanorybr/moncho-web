@@ -398,14 +398,18 @@ export default function GeneratorPage() {
 {(status === 'polling' || status === 'loading') && (
   <div style={{
     marginTop: '32px', background: 'white',
-    borderRadius: '16px', padding: '24px',
-    border: '1px solid #E8E4DC',
+    borderRadius: '16px', padding: '28px',
+    border: '2px solid #1D9E75',
   }}>
-    <p style={{ fontWeight: 700, marginBottom: '8px', color: '#1A1A1A', fontSize: '16px' }}>
-      🐱 Moncho is creating your unit study...
+    <p style={{ fontWeight: 700, marginBottom: '8px', color: '#085041', fontSize: '18px' }}>
+      🐱 Moncho is on it!
     </p>
-    <p style={{ color: '#5F5E5A', fontSize: '14px', marginBottom: '16px' }}>
-      This usually takes 1-2 minutes. Please don't close this window!
+    <p style={{ color: '#1D9E75', fontSize: '15px', marginBottom: '16px', fontStyle: 'italic' }}>
+      This takes 3-5 minutes. Yes, minutes. But think about it —
+      a curriculum specialist would take 3-5 <em>hours</em>. ☕
+    </p>
+    <p style={{ color: '#5F5E5A', fontSize: '13px', marginBottom: '20px' }}>
+      Please don't close this window! Moncho is working hard behind the scenes. 🐾
     </p>
     {progress.length > 0 ? progress.map((p, i) => (
       <p key={i} style={{ color: '#1D9E75', fontSize: '14px', marginBottom: '4px' }}>
@@ -413,11 +417,18 @@ export default function GeneratorPage() {
       </p>
     )) : (
       <div>
-        <p style={{ color: '#5F5E5A', fontSize: '13px', marginBottom: '4px' }}>⏳ Starting the agents...</p>
-        <p style={{ color: '#5F5E5A', fontSize: '13px', marginBottom: '4px' }}>📚 Planning your subjects...</p>
-        <p style={{ color: '#5F5E5A', fontSize: '13px' }}>✍️ Writing your challenges...</p>
+        <p style={{ color: '#5F5E5A', fontSize: '13px', marginBottom: '6px' }}>⏳ Waking up the agents...</p>
+        <p style={{ color: '#5F5E5A', fontSize: '13px', marginBottom: '6px' }}>🧠 Planning your subjects...</p>
+        <p style={{ color: '#5F5E5A', fontSize: '13px', marginBottom: '6px' }}>✍️ Writing hands-on challenges...</p>
+        <p style={{ color: '#5F5E5A', fontSize: '13px' }}>🎨 Adding the Moncho magic...</p>
       </div>
     )}
+    <div style={{
+      marginTop: '20px', padding: '12px 16px',
+      background: '#F7F4EF', borderRadius: '10px',
+      fontSize: '12px', color: '#5F5E5A', fontStyle: 'italic',
+    }}>
+      💡
   </div>
 )}
 
