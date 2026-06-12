@@ -18,6 +18,7 @@ const PHILOSOPHIES = [
   { id: 'charlotte_mason', emoji: '📖', label: 'Charlotte Mason',  desc: 'Living books, narration, nature study' },
   { id: 'waldorf',         emoji: '🌿', label: 'Waldorf',          desc: 'Artistic, imaginative, developmental stages' },
   { id: 'forest_school',   emoji: '🌲', label: 'Forest School',    desc: 'Outdoor learning, nature connection' },
+  { id: 'unschooling',     emoji: '🌎', label: 'Unschooling',      desc: 'Child-led, interest-based, no fixed curriculum' },
 ]
 
 const SUBJECTS = [
