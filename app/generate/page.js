@@ -442,7 +442,7 @@ export default function GeneratorPage() {
               💬 Parent note <span style={{ color: '#5F5E5A', fontWeight: 400 }}>(optional)</span>
             </label>
             <textarea
-              placeholder="e.g. She loves building things but hates writing. He's really into Minecraft. She's preparing for a dance competition..."
+              placeholder="e.g. She loves building things but hates writing. He's really into Minecraft"
               value={form.parent_note}
               onChange={e => setForm(f => ({ ...f, parent_note: e.target.value }))}
               rows={3}
