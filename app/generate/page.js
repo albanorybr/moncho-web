@@ -85,7 +85,7 @@ export default function GeneratorPage() {
           .eq('user_id', session.user.id)
           .gte('created_at', startOfMonth.toISOString())
 
-        if (count >= 999) {
+        if (count >= 2) {
           setError('🌟 You have used your 2 free studies this month. Upgrade to Pro for unlimited studies!')
         }
       }
