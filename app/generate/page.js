@@ -199,12 +199,12 @@ export default function GeneratorPage() {
       }}>
         <a href="/" style={{ fontSize: '20px', fontWeight: 700, color: '#1D9E75', textDecoration: 'none' }}>
           🐱 Moncho
-        </a>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <a href="/dashboard" style={{ fontSize: '14px', color: '#5F5E5A', textDecoration: 'none' }}>
+         </a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+           <a href="/dashboard" style={{ fontSize: '14px', color: '#5F5E5A', textDecoration: 'none' }}>
             My Studies
           </a>
-          <a href="/resources" style={{ fontSize: '14px', color: '#5F5E5A', textDecoration: 'none' }}>
+            <a href="/resources" style={{ fontSize: '14px', color: '#5F5E5A', textDecoration: 'none' }}>
             Resources
           </a>
           <button onClick={handleLogout} style={{
