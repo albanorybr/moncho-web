@@ -206,7 +206,7 @@ export default function GeneratorPage() {
           </a>
           <a href="/resources" style={{ fontSize: '14px', color: '#5F5E5A', textDecoration: 'none' }}>
             Resources
-</a>
+          </a>
           <button onClick={handleLogout} style={{
             background: 'none', border: '1px solid #E8E4DC', borderRadius: '100px',
             padding: '8px 16px', fontSize: '13px', color: '#5F5E5A',
