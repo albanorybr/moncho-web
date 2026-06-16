@@ -412,7 +412,20 @@ export default function Home() {
           display: 'inline-block',
         }}>Generate your first study →</a>
       </section>
-
+      {/* AI DISCLAIMER */}
+      <div style={{
+        background: 'rgba(255,255,255,0.08)',
+        border: '1px solid rgba(255,255,255,0.15)',
+        borderRadius: '12px',
+        padding: '16px 24px',
+        maxWidth: '560px',
+        margin: '0 auto 32px',
+        textAlign: 'center',
+      }}>
+      <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, margin: 0 }}>
+    🤖 <strong>Moncho is an AI-powered tool designed for parents and educators.</strong> AI can make mistakes — always review the generated unit study before sharing it with your child. You know your child best!
+      </p>
+    </div>
       {/* FOOTER */}
       <footer style={{
         background: '#F7F4EF',
