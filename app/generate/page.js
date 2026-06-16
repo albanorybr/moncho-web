@@ -13,32 +13,68 @@ const AGE_RANGES = [
 ]
 
 const PHILOSOPHIES = [
-  { id: 'moncho',          emoji: '🐱', label: 'Moncho Style',     desc: 'Hands-on, curiosity-driven, project-based' },
-  { id: 'montessori',      emoji: '🌱', label: 'Montessori',       desc: 'Child-led, self-paced, prepared environment' },
-  { id: 'charlotte_mason', emoji: '📖', label: 'Charlotte Mason',  desc: 'Living books, narration, nature study' },
-  { id: 'waldorf',         emoji: '🌿', label: 'Waldorf',          desc: 'Artistic, imaginative, developmental stages' },
-  { id: 'forest_school',   emoji: '🌲', label: 'Forest School',    desc: 'Outdoor learning, nature connection' },
-  { id: 'unschooling',     emoji: '🌎', label: 'Unschooling',      desc: 'Child-led, interest-based, no fixed curriculum' },
+  { id: 'moncho',          emoji: '🐱', label: 'Moncho Style',    desc: 'Hands-on, curiosity-driven, project-based' },
+  { id: 'montessori',      emoji: '🌱', label: 'Montessori',      desc: 'Child-led, self-paced, prepared environment' },
+  { id: 'charlotte_mason', emoji: '📖', label: 'Charlotte Mason', desc: 'Living books, narration, nature study' },
+  { id: 'waldorf',         emoji: '🌿', label: 'Waldorf',         desc: 'Artistic, imaginative, developmental stages' },
+  { id: 'forest_school',   emoji: '🌲', label: 'Forest School',   desc: 'Outdoor learning, nature connection' },
+  { id: 'unschooling',     emoji: '🌎', label: 'Unschooling',     desc: 'Child-led, interest-based, no fixed curriculum' },
 ]
 
 const SUBJECTS = [
-  { id: 'Science',          emoji: '🔬', color: '#1D9E75' },
-  { id: 'Biology',          emoji: '🧬', color: '#2E7D32' },
-  { id: 'Chemistry',        emoji: '⚗️',  color: '#6A1B9A' },
-  { id: 'Physics',          emoji: '⚡',  color: '#1565C0' },
-  { id: 'Earth Science',    emoji: '🌍', color: '#4E342E' },
-  { id: 'Astronomy',        emoji: '🌌', color: '#1A237E' },
-  { id: 'Math',             emoji: '📊', color: '#2E86C1' },
-  { id: 'Language Arts',    emoji: '📖', color: '#7D3C98' },
-  { id: 'Geography',        emoji: '🗺️',  color: '#0277BD' },
-  { id: 'History',          emoji: '📜', color: '#F0A500' },
-  { id: 'Art & Creativity', emoji: '🎨', color: '#E8522A' },
-  { id: 'Music',            emoji: '🎵', color: '#C2185B' },
-  { id: 'Movement & Body',  emoji: '🏃', color: '#00796B' },
-  { id: 'Critical Thinking',emoji: '💡', color: '#7D3C98' },
-  { id: 'Life Skills & SEL',emoji: '🌱', color: '#388E3C' },
-  { id: 'Technology',       emoji: '💻', color: '#283593' },
+  { id: 'Science',           emoji: '🔬', color: '#1D9E75' },
+  { id: 'Biology',           emoji: '🧬', color: '#2E7D32' },
+  { id: 'Chemistry',         emoji: '⚗️',  color: '#6A1B9A' },
+  { id: 'Physics',           emoji: '⚡',  color: '#1565C0' },
+  { id: 'Earth Science',     emoji: '🌍', color: '#4E342E' },
+  { id: 'Astronomy',         emoji: '🌌', color: '#1A237E' },
+  { id: 'Math',              emoji: '📊', color: '#2E86C1' },
+  { id: 'Language Arts',     emoji: '📖', color: '#7D3C98' },
+  { id: 'Geography',         emoji: '🗺️',  color: '#0277BD' },
+  { id: 'History',           emoji: '📜', color: '#F0A500' },
+  { id: 'Art & Creativity',  emoji: '🎨', color: '#E8522A' },
+  { id: 'Music',             emoji: '🎵', color: '#C2185B' },
+  { id: 'Movement & Body',   emoji: '🏃', color: '#00796B' },
+  { id: 'Critical Thinking', emoji: '💡', color: '#7D3C98' },
+  { id: 'Life Skills & SEL', emoji: '🌱', color: '#388E3C' },
+  { id: 'Technology',        emoji: '💻', color: '#283593' },
 ]
+
+const GREEN  = '#1D9E75'
+const DARK   = '#085041'
+const CREAM  = '#F7F4EF'
+const BORDER = '#E8E4DC'
+const GRAY   = '#5F5E5A'
+
+// ── Scroll to top button ──────────────────────────────────────
+function ScrollToTopButton() {
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 400)
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  if (!visible) return null
+
+  return (
+    <button
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      style={{
+        position: 'fixed', bottom: '32px', right: '32px',
+        background: GREEN, color: 'white',
+        border: 'none', borderRadius: '100px',
+        padding: '12px 20px', fontSize: '14px', fontWeight: 700,
+        cursor: 'pointer', fontFamily: 'Georgia, serif',
+        boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
+        zIndex: 1000,
+      }}
+    >
+      ↑ Top
+    </button>
+  )
+}
 
 export default function GeneratorPage() {
   const [form, setForm] = useState({
@@ -112,16 +148,13 @@ export default function GeneratorPage() {
     setProgress([])
     setResult(null)
 
-    // Build the payload — for mini/full, let the AI pick subjects
     const payload = {
       ...form,
       age: form.age_range,
       learning_style: form.philosophy,
-      // For mini/full modes, pass all subjects so the AI can pick the best ones
       subjects_available: form.mode === 'custom'
         ? form.subjects_available
         : SUBJECTS.map(s => s.id),
-      // Pass depth only for custom mode
       depth: form.mode === 'custom' ? form.depth : 'light',
     }
 
@@ -154,7 +187,6 @@ export default function GeneratorPage() {
             setResult(statusData.result)
             setStatus('done')
 
-            // Save to Supabase
             const { data: { session } } = await supabase.auth.getSession()
             if (session) {
               await supabase.from('studies').insert({
@@ -187,29 +219,61 @@ export default function GeneratorPage() {
     window.location.href = '/login'
   }
 
+  function downloadPDF() {
+    const printWindow = window.open('', '_blank')
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Moncho - ${form.theme} Unit Study</title>
+          <style>
+            * { box-sizing: border-box; margin: 0; padding: 0; }
+            body { font-family: Georgia, serif; max-width: 750px; margin: 40px auto; padding: 20px; background: #F7F4EF; color: #1A1A1A; line-height: 1.8; }
+            .header { background: #085041; color: white; padding: 32px; border-radius: 16px; margin-bottom: 32px; text-align: center; }
+            .header h1 { font-size: 32px; margin-bottom: 8px; }
+            .header .angle { font-style: italic; color: rgba(255,255,255,0.85); font-size: 15px; margin-top: 10px; }
+            .header .meta { color: rgba(255,255,255,0.6); font-size: 13px; margin-top: 6px; }
+            pre { white-space: pre-wrap; font-family: Georgia, serif; font-size: 14px; line-height: 2; background: white; padding: 28px; border-radius: 12px; }
+            .footer { text-align: center; color: #5F5E5A; font-size: 12px; margin-top: 32px; padding-top: 16px; border-top: 1px solid #E8E4DC; }
+            @media print { body { background: white; } }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div class="meta">🐱 Moncho Unschooling · ${form.language}</div>
+            <h1>${form.theme} Unit Study</h1>
+            <div class="angle">"${result.creative_angle}"</div>
+            <div class="meta" style="margin-top:12px">Subjects: ${result.subjects_included?.join(' · ')}</div>
+          </div>
+          <pre>${result.output.replace(/---/g, '</pre><hr style="border:none;border-top:3px solid #1D9E75;margin:28px 0;opacity:0.4"><pre>')}</pre>
+          <div class="footer">Moncho Unschooling · monchounschooling.com · AI-generated content — reviewed by a parent before use</div>
+        </body>
+      </html>
+    `)
+    printWindow.document.close()
+    printWindow.print()
+  }
+
   const isGenerating = status === 'loading' || status === 'polling'
 
   return (
-    <main style={{ minHeight: '100vh', background: '#F7F4EF', fontFamily: 'Georgia, serif' }}>
+    <main style={{ minHeight: '100vh', background: CREAM, fontFamily: 'Georgia, serif' }}>
+
+      <ScrollToTopButton />
 
       {/* NAV */}
       <nav style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        padding: '20px 48px', background: 'white', borderBottom: '1px solid #E8E4DC',
+        padding: '20px 48px', background: 'white', borderBottom: `1px solid ${BORDER}`,
       }}>
-        <a href="/" style={{ fontSize: '20px', fontWeight: 700, color: '#1D9E75', textDecoration: 'none' }}>
+        <a href="/" style={{ fontSize: '20px', fontWeight: 700, color: GREEN, textDecoration: 'none' }}>
           🐱 Moncho
-         </a>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-           <a href="/dashboard" style={{ fontSize: '14px', color: '#5F5E5A', textDecoration: 'none' }}>
-            My Studies
-            <a>
-          <a href="/resources" style={{ fontSize: '14px', color: '#5F5E5A', textDecoration: 'none' }}>
-            📚 Resources
-            </a>
+        </a>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <a href="/dashboard" style={{ fontSize: '14px', color: GRAY, textDecoration: 'none' }}>My Studies</a>
+          <a href="/resources" style={{ fontSize: '14px', color: GRAY, textDecoration: 'none' }}>📚 Resources</a>
           <button onClick={handleLogout} style={{
-            background: 'none', border: '1px solid #E8E4DC', borderRadius: '100px',
-            padding: '8px 16px', fontSize: '13px', color: '#5F5E5A',
+            background: 'none', border: `1px solid ${BORDER}`, borderRadius: '100px',
+            padding: '8px 16px', fontSize: '13px', color: GRAY,
             cursor: 'pointer', fontFamily: 'Georgia, serif',
           }}>
             Log out
@@ -222,7 +286,7 @@ export default function GeneratorPage() {
         <h1 style={{ fontSize: '36px', fontWeight: 700, color: '#1A1A1A', letterSpacing: '-1px', marginBottom: '8px' }}>
           Generate a Unit Study
         </h1>
-        <p style={{ color: '#5F5E5A', fontSize: '16px', marginBottom: '40px' }}>
+        <p style={{ color: GRAY, fontSize: '16px', marginBottom: '40px' }}>
           Fill in the details below and Moncho will create a complete unit study for your child.
         </p>
 
@@ -240,19 +304,19 @@ export default function GeneratorPage() {
               onChange={e => setForm(f => ({ ...f, theme: e.target.value }))}
               style={{
                 width: '100%', padding: '14px 16px', borderRadius: '12px',
-                border: '2px solid #E8E4DC', fontSize: '16px',
+                border: `2px solid ${BORDER}`, fontSize: '16px',
                 fontFamily: 'Georgia, serif', background: 'white',
                 outline: 'none', boxSizing: 'border-box',
               }}
-              onFocus={e => e.target.style.borderColor = '#1D9E75'}
-              onBlur={e => e.target.style.borderColor = '#E8E4DC'}
+              onFocus={e => e.target.style.borderColor = GREEN}
+              onBlur={e => e.target.style.borderColor = BORDER}
             />
             {error && (
               <div style={{ marginTop: '8px' }}>
                 <p style={{ color: '#E8522A', fontSize: '14px', marginBottom: '12px' }}>{error}</p>
                 {error.includes('Upgrade to Pro') && (
                   <a href="/pricing" style={{
-                    display: 'inline-block', background: '#1D9E75', color: 'white',
+                    display: 'inline-block', background: GREEN, color: 'white',
                     padding: '12px 24px', borderRadius: '100px', textDecoration: 'none',
                     fontSize: '15px', fontWeight: 700,
                   }}>
@@ -270,20 +334,14 @@ export default function GeneratorPage() {
             </label>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
               {AGE_RANGES.map(a => (
-                <button
-                  key={a.id}
-                  onClick={() => setForm(f => ({ ...f, age_range: a.id }))}
-                  style={{
-                    padding: '12px 16px', borderRadius: '12px', cursor: 'pointer',
-                    border: `2px solid ${form.age_range === a.id ? '#1D9E75' : '#E8E4DC'}`,
-                    background: form.age_range === a.id ? '#E8F7F2' : 'white',
-                    fontFamily: 'Georgia, serif', textAlign: 'left',
-                  }}
-                >
-                  <div style={{ fontWeight: 700, fontSize: '14px', color: form.age_range === a.id ? '#085041' : '#1A1A1A' }}>
-                    {a.label}
-                  </div>
-                  <div style={{ fontSize: '12px', color: '#5F5E5A', marginTop: '2px' }}>{a.desc}</div>
+                <button key={a.id} onClick={() => setForm(f => ({ ...f, age_range: a.id }))} style={{
+                  padding: '12px 16px', borderRadius: '12px', cursor: 'pointer',
+                  border: `2px solid ${form.age_range === a.id ? GREEN : BORDER}`,
+                  background: form.age_range === a.id ? '#E8F7F2' : 'white',
+                  fontFamily: 'Georgia, serif', textAlign: 'left',
+                }}>
+                  <div style={{ fontWeight: 700, fontSize: '14px', color: form.age_range === a.id ? DARK : '#1A1A1A' }}>{a.label}</div>
+                  <div style={{ fontSize: '12px', color: GRAY, marginTop: '2px' }}>{a.desc}</div>
                 </button>
               ))}
             </div>
@@ -296,18 +354,14 @@ export default function GeneratorPage() {
             </label>
             <div style={{ display: 'flex', gap: '10px' }}>
               {['English', 'Español'].map(lang => (
-                <button
-                  key={lang}
-                  onClick={() => setForm(f => ({ ...f, language: lang }))}
-                  style={{
-                    padding: '12px 24px', borderRadius: '100px', cursor: 'pointer',
-                    border: `2px solid ${form.language === lang ? '#1D9E75' : '#E8E4DC'}`,
-                    background: form.language === lang ? '#1D9E75' : 'white',
-                    color: form.language === lang ? 'white' : '#5F5E5A',
-                    fontWeight: form.language === lang ? 700 : 400,
-                    fontSize: '15px', fontFamily: 'Georgia, serif',
-                  }}
-                >
+                <button key={lang} onClick={() => setForm(f => ({ ...f, language: lang }))} style={{
+                  padding: '12px 24px', borderRadius: '100px', cursor: 'pointer',
+                  border: `2px solid ${form.language === lang ? GREEN : BORDER}`,
+                  background: form.language === lang ? GREEN : 'white',
+                  color: form.language === lang ? 'white' : GRAY,
+                  fontWeight: form.language === lang ? 700 : 400,
+                  fontSize: '15px', fontFamily: 'Georgia, serif',
+                }}>
                   {lang === 'English' ? '🇺🇸 English' : '🇬🇹 Español'}
                 </button>
               ))}
@@ -319,28 +373,29 @@ export default function GeneratorPage() {
             <label style={{ display: 'block', fontWeight: 700, marginBottom: '6px', fontSize: '15px' }}>
               🧭 Learning Philosophy
             </label>
-            <p style={{ color: '#5F5E5A', fontSize: '13px', marginBottom: '12px' }}>
+            <p style={{ color: GRAY, fontSize: '13px', marginBottom: '12px' }}>
               Choose the educational approach that resonates with your family.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {PHILOSOPHIES.map(p => (
-                <button
-                  key={p.id}
-                  onClick={() => setForm(f => ({ ...f, philosophy: p.id }))}
-                  style={{
-                    padding: '12px 16px', borderRadius: '12px', cursor: 'pointer',
-                    border: `2px solid ${form.philosophy === p.id ? '#1D9E75' : '#E8E4DC'}`,
-                    background: form.philosophy === p.id ? '#E8F7F2' : 'white',
-                    fontFamily: 'Georgia, serif', textAlign: 'left',
-                    display: 'flex', alignItems: 'center', gap: '12px',
-                  }}
-                >
+                <button key={p.id} onClick={() => setForm(f => ({ ...f, philosophy: p.id }))} style={{
+                  padding: '12px 16px', borderRadius: '12px', cursor: 'pointer',
+                  border: `2px solid ${form.philosophy === p.id ? GREEN : BORDER}`,
+                  background: form.philosophy === p.id ? '#E8F7F2' : 'white',
+                  fontFamily: 'Georgia, serif', textAlign: 'left',
+                  display: 'flex', alignItems: 'center', gap: '12px',
+                }}>
                   <span style={{ fontSize: '20px' }}>{p.emoji}</span>
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: '14px', color: form.philosophy === p.id ? '#085041' : '#1A1A1A' }}>
-                      {p.label} {p.id === 'moncho' && <span style={{ fontSize: '11px', background: '#1D9E75', color: 'white', padding: '2px 8px', borderRadius: '20px', marginLeft: '6px' }}>RECOMMENDED</span>}
+                    <div style={{ fontWeight: 700, fontSize: '14px', color: form.philosophy === p.id ? DARK : '#1A1A1A' }}>
+                      {p.label}
+                      {p.id === 'moncho' && (
+                        <span style={{ fontSize: '11px', background: GREEN, color: 'white', padding: '2px 8px', borderRadius: '20px', marginLeft: '6px' }}>
+                          RECOMMENDED
+                        </span>
+                      )}
                     </div>
-                    <div style={{ fontSize: '12px', color: '#5F5E5A', marginTop: '2px' }}>{p.desc}</div>
+                    <div style={{ fontSize: '12px', color: GRAY, marginTop: '2px' }}>{p.desc}</div>
                   </div>
                 </button>
               ))}
@@ -352,35 +407,29 @@ export default function GeneratorPage() {
             <label style={{ display: 'block', fontWeight: 700, marginBottom: '6px', fontSize: '15px' }}>
               📚 Unit Study Type
             </label>
-            <p style={{ color: '#5F5E5A', fontSize: '13px', marginBottom: '12px' }}>
+            <p style={{ color: GRAY, fontSize: '13px', marginBottom: '12px' }}>
               Mini and Full let Moncho pick the best subjects. Custom lets you choose.
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
               {[
-                { id: 'mini',   label: '⚡ Mini',   desc: 'AI picks 3 best subjects' },
-                { id: 'full',   label: '📦 Full',   desc: 'AI picks up to 10 subjects' },
-                { id: 'custom', label: '🎛️ Custom',  desc: 'You choose the subjects' },
+                { id: 'mini',   label: '⚡ Mini',  desc: 'AI picks 3 best subjects' },
+                { id: 'full',   label: '📦 Full',  desc: 'AI picks up to 10 subjects' },
+                { id: 'custom', label: '🎛️ Custom', desc: 'You choose the subjects' },
               ].map(m => (
-                <button
-                  key={m.id}
-                  onClick={() => setForm(f => ({ ...f, mode: m.id }))}
-                  style={{
-                    padding: '14px 12px', borderRadius: '12px', cursor: 'pointer',
-                    border: `2px solid ${form.mode === m.id ? '#1D9E75' : '#E8E4DC'}`,
-                    background: form.mode === m.id ? '#E8F7F2' : 'white',
-                    fontFamily: 'Georgia, serif', textAlign: 'center',
-                  }}
-                >
-                  <div style={{ fontWeight: 700, fontSize: '14px', color: form.mode === m.id ? '#085041' : '#1A1A1A' }}>
-                    {m.label}
-                  </div>
-                  <div style={{ fontSize: '11px', color: '#5F5E5A', marginTop: '4px' }}>{m.desc}</div>
+                <button key={m.id} onClick={() => setForm(f => ({ ...f, mode: m.id }))} style={{
+                  padding: '14px 12px', borderRadius: '12px', cursor: 'pointer',
+                  border: `2px solid ${form.mode === m.id ? GREEN : BORDER}`,
+                  background: form.mode === m.id ? '#E8F7F2' : 'white',
+                  fontFamily: 'Georgia, serif', textAlign: 'center',
+                }}>
+                  <div style={{ fontWeight: 700, fontSize: '14px', color: form.mode === m.id ? DARK : '#1A1A1A' }}>{m.label}</div>
+                  <div style={{ fontSize: '11px', color: GRAY, marginTop: '4px' }}>{m.desc}</div>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* SUBJECTS — only show in Custom mode */}
+          {/* SUBJECTS — only in Custom mode */}
           {form.mode === 'custom' && (
             <div>
               <label style={{ display: 'block', fontWeight: 700, marginBottom: '8px', fontSize: '15px' }}>
@@ -390,25 +439,21 @@ export default function GeneratorPage() {
                 {SUBJECTS.map(s => {
                   const selected = form.subjects_available.includes(s.id)
                   return (
-                    <button
-                      key={s.id}
-                      onClick={() => toggleSubject(s.id)}
-                      style={{
-                        padding: '8px 16px', borderRadius: '100px', cursor: 'pointer',
-                        border: `2px solid ${selected ? s.color : '#E8E4DC'}`,
-                        background: selected ? s.color + '22' : 'white',
-                        color: selected ? s.color : '#5F5E5A',
-                        fontWeight: selected ? 700 : 400,
-                        fontSize: '14px', fontFamily: 'Georgia, serif',
-                      }}
-                    >
+                    <button key={s.id} onClick={() => toggleSubject(s.id)} style={{
+                      padding: '8px 16px', borderRadius: '100px', cursor: 'pointer',
+                      border: `2px solid ${selected ? s.color : BORDER}`,
+                      background: selected ? s.color + '22' : 'white',
+                      color: selected ? s.color : GRAY,
+                      fontWeight: selected ? 700 : 400,
+                      fontSize: '14px', fontFamily: 'Georgia, serif',
+                    }}>
                       {s.emoji} {s.id}
                     </button>
                   )
                 })}
               </div>
 
-              {/* Depth — only in Custom mode */}
+              {/* Depth */}
               <div style={{ marginTop: '20px' }}>
                 <label style={{ display: 'block', fontWeight: 700, marginBottom: '8px', fontSize: '15px' }}>
                   🎯 Depth per subject
@@ -419,18 +464,14 @@ export default function GeneratorPage() {
                     { id: 'medium', label: 'Medium', desc: '5-6 subtopics' },
                     { id: 'deep',   label: 'Deep',   desc: 'Up to 10 subtopics' },
                   ].map(d => (
-                    <button
-                      key={d.id}
-                      onClick={() => setForm(f => ({ ...f, depth: d.id }))}
-                      style={{
-                        padding: '10px 20px', borderRadius: '100px', cursor: 'pointer',
-                        border: `2px solid ${form.depth === d.id ? '#1D9E75' : '#E8E4DC'}`,
-                        background: form.depth === d.id ? '#1D9E75' : 'white',
-                        color: form.depth === d.id ? 'white' : '#5F5E5A',
-                        fontWeight: form.depth === d.id ? 700 : 400,
-                        fontSize: '14px', fontFamily: 'Georgia, serif',
-                      }}
-                    >
+                    <button key={d.id} onClick={() => setForm(f => ({ ...f, depth: d.id }))} style={{
+                      padding: '10px 20px', borderRadius: '100px', cursor: 'pointer',
+                      border: `2px solid ${form.depth === d.id ? GREEN : BORDER}`,
+                      background: form.depth === d.id ? GREEN : 'white',
+                      color: form.depth === d.id ? 'white' : GRAY,
+                      fontWeight: form.depth === d.id ? 700 : 400,
+                      fontSize: '14px', fontFamily: 'Georgia, serif',
+                    }}>
                       {d.label} <span style={{ opacity: 0.7, fontSize: '12px' }}>({d.desc})</span>
                     </button>
                   ))}
@@ -442,16 +483,16 @@ export default function GeneratorPage() {
           {/* PARENT NOTE */}
           <div>
             <label style={{ display: 'block', fontWeight: 700, marginBottom: '8px', fontSize: '15px' }}>
-              💬 Parent note <span style={{ color: '#5F5E5A', fontWeight: 400 }}>(optional)</span>
+              💬 Parent note <span style={{ color: GRAY, fontWeight: 400 }}>(optional)</span>
             </label>
             <textarea
-              placeholder="e.g. She loves building things but hates writing. He's really into Minecraft"
+              placeholder="e.g. She loves building things but hates writing. He's really into Minecraft..."
               value={form.parent_note}
               onChange={e => setForm(f => ({ ...f, parent_note: e.target.value }))}
               rows={3}
               style={{
                 width: '100%', padding: '14px 16px', borderRadius: '12px',
-                border: '2px solid #E8E4DC', fontSize: '15px',
+                border: `2px solid ${BORDER}`, fontSize: '15px',
                 fontFamily: 'Georgia, serif', background: 'white',
                 resize: 'vertical', boxSizing: 'border-box',
               }}
@@ -463,7 +504,7 @@ export default function GeneratorPage() {
             onClick={handleGenerate}
             disabled={isGenerating || !!error}
             style={{
-              background: isGenerating ? '#5F5E5A' : '#1D9E75',
+              background: isGenerating ? GRAY : GREEN,
               color: 'white', padding: '18px', borderRadius: '100px',
               border: 'none', fontSize: '18px', fontWeight: 700,
               cursor: isGenerating ? 'not-allowed' : 'pointer',
@@ -474,37 +515,46 @@ export default function GeneratorPage() {
              status === 'polling' ? '⏳ Generating your unit study...' :
              '✨ Generate Unit Study'}
           </button>
+
+          {/* AI DISCLAIMER — below generate button */}
+          <p style={{
+            fontSize: '12px', color: GRAY, textAlign: 'center',
+            lineHeight: 1.6, marginTop: '-12px',
+          }}>
+            🤖 AI-generated content — please review before sharing with your child.
+          </p>
+
         </div>
 
         {/* PROGRESS */}
         {isGenerating && (
           <div style={{
             marginTop: '32px', background: 'white', borderRadius: '16px',
-            padding: '28px', border: '2px solid #1D9E75',
+            padding: '28px', border: `2px solid ${GREEN}`,
           }}>
-            <p style={{ fontWeight: 700, marginBottom: '8px', color: '#085041', fontSize: '18px' }}>
+            <p style={{ fontWeight: 700, marginBottom: '8px', color: DARK, fontSize: '18px' }}>
               🐱 Moncho is on it!
             </p>
-            <p style={{ color: '#1D9E75', fontSize: '15px', marginBottom: '16px', fontStyle: 'italic' }}>
+            <p style={{ color: GREEN, fontSize: '15px', marginBottom: '16px', fontStyle: 'italic' }}>
               This takes 3-5 minutes. Yes, minutes. But think about it —
               a curriculum specialist would take 3-5 <em>hours</em>. ☕
             </p>
-            <p style={{ color: '#5F5E5A', fontSize: '13px', marginBottom: '20px' }}>
+            <p style={{ color: GRAY, fontSize: '13px', marginBottom: '20px' }}>
               Please don't close this window! Moncho is working hard behind the scenes. 🐾
             </p>
             {progress.length > 0 ? progress.map((p, i) => (
-              <p key={i} style={{ color: '#1D9E75', fontSize: '14px', marginBottom: '4px' }}>✅ {p}</p>
+              <p key={i} style={{ color: GREEN, fontSize: '14px', marginBottom: '4px' }}>✅ {p}</p>
             )) : (
               <div>
-                <p style={{ color: '#5F5E5A', fontSize: '13px', marginBottom: '6px' }}>⏳ Waking up the agents...</p>
-                <p style={{ color: '#5F5E5A', fontSize: '13px', marginBottom: '6px' }}>🧠 Planning your subjects...</p>
-                <p style={{ color: '#5F5E5A', fontSize: '13px', marginBottom: '6px' }}>✍️ Writing hands-on challenges...</p>
-                <p style={{ color: '#5F5E5A', fontSize: '13px' }}>🎨 Adding the Moncho magic...</p>
+                <p style={{ color: GRAY, fontSize: '13px', marginBottom: '6px' }}>⏳ Waking up the agents...</p>
+                <p style={{ color: GRAY, fontSize: '13px', marginBottom: '6px' }}>🧠 Planning your subjects...</p>
+                <p style={{ color: GRAY, fontSize: '13px', marginBottom: '6px' }}>✍️ Writing hands-on challenges...</p>
+                <p style={{ color: GRAY, fontSize: '13px' }}>🎨 Adding the Moncho magic...</p>
               </div>
             )}
             <div style={{
-              marginTop: '20px', padding: '12px 16px', background: '#F7F4EF',
-              borderRadius: '10px', fontSize: '12px', color: '#5F5E5A', fontStyle: 'italic',
+              marginTop: '20px', padding: '12px 16px', background: CREAM,
+              borderRadius: '10px', fontSize: '12px', color: GRAY, fontStyle: 'italic',
             }}>
               💡 Fun fact: The average unit study takes 4-6 hours to create from scratch.
               Moncho does it in minutes — so you can spend that time actually exploring with your child! 🌍
@@ -517,89 +567,49 @@ export default function GeneratorPage() {
           <div style={{ marginTop: '40px' }}>
             <div style={{
               background: '#E8F7F2', borderRadius: '16px', padding: '24px',
-              marginBottom: '24px', border: '2px solid #1D9E75',
+              marginBottom: '24px', border: `2px solid ${GREEN}`,
             }}>
-              <p style={{ fontWeight: 700, color: '#085041', fontSize: '18px', marginBottom: '8px' }}>
+              <p style={{ fontWeight: 700, color: DARK, fontSize: '18px', marginBottom: '8px' }}>
                 🎉 Your unit study is ready!
               </p>
-              <p style={{ color: '#1D9E75', fontSize: '15px', fontStyle: 'italic', marginBottom: '12px' }}>
+              <p style={{ color: GREEN, fontSize: '15px', fontStyle: 'italic', marginBottom: '12px' }}>
                 "{result.creative_angle}"
               </p>
-              <p style={{ color: '#085041', fontSize: '14px' }}>
+              <p style={{ color: DARK, fontSize: '14px' }}>
                 Subjects: {result.subjects_included?.join(', ')}
               </p>
             </div>
 
             <div style={{
               background: 'white', borderRadius: '16px', padding: '32px',
-              border: '1px solid #E8E4DC', whiteSpace: 'pre-wrap',
+              border: `1px solid ${BORDER}`, whiteSpace: 'pre-wrap',
               fontFamily: 'Georgia, serif', fontSize: '14px', lineHeight: '1.8',
               color: '#1A1A1A', maxHeight: '500px', overflowY: 'auto',
             }}>
               {result.output}
             </div>
 
-            <div style={{ display: 'flex', gap: '12px', marginTop: '16px', flexWrap: 'wrap' }}>
+            {/* PDF DOWNLOAD BUTTON — styled prominently */}
+            <div style={{ marginTop: '20px' }}>
               <button
-                onClick={() => {
-                  const blob = new Blob([result.output], { type: 'text/plain' })
-                  const url  = URL.createObjectURL(blob)
-                  const a    = document.createElement('a')
-                  a.href     = url
-                  a.download = `Moncho_${form.theme}_Unit_Study.txt`
-                  a.click()
-                }}
+                onClick={downloadPDF}
                 style={{
-                  background: '#F7F4EF', color: '#1A1A1A', padding: '14px 24px',
-                  borderRadius: '100px', border: '1px solid #E8E4DC', fontSize: '15px',
-                  fontWeight: 600, cursor: 'pointer', fontFamily: 'Georgia, serif',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  gap: '10px', width: '100%',
+                  background: DARK, color: 'white',
+                  padding: '18px 24px', borderRadius: '14px',
+                  border: 'none', fontSize: '17px', fontWeight: 700,
+                  cursor: 'pointer', fontFamily: 'Georgia, serif',
+                  boxShadow: '0 4px 16px rgba(8,80,65,0.25)',
                 }}
+                onMouseEnter={e => e.currentTarget.style.background = '#063d31'}
+                onMouseLeave={e => e.currentTarget.style.background = DARK}
               >
-                📄 Download as Text
+                📥 Download Unit Study PDF
               </button>
-
-              <button
-                onClick={() => {
-                  const printWindow = window.open('', '_blank')
-                  printWindow.document.write(`
-                    <html>
-                      <head>
-                        <title>Moncho - ${form.theme} Unit Study</title>
-                        <style>
-                          * { box-sizing: border-box; margin: 0; padding: 0; }
-                          body { font-family: Georgia, serif; max-width: 750px; margin: 40px auto; padding: 20px; background: #F7F4EF; color: #1A1A1A; line-height: 1.8; }
-                          .header { background: #085041; color: white; padding: 32px; border-radius: 16px; margin-bottom: 32px; text-align: center; }
-                          .header h1 { font-size: 32px; margin-bottom: 8px; }
-                          .header .angle { font-style: italic; color: rgba(255,255,255,0.85); font-size: 15px; margin-top: 10px; }
-                          .header .meta { color: rgba(255,255,255,0.6); font-size: 13px; margin-top: 6px; }
-                          pre { white-space: pre-wrap; font-family: Georgia, serif; font-size: 14px; line-height: 2; background: white; padding: 28px; border-radius: 12px; }
-                          .footer { text-align: center; color: #5F5E5A; font-size: 12px; margin-top: 32px; padding-top: 16px; border-top: 1px solid #E8E4DC; }
-                          @media print { body { background: white; } }
-                        </style>
-                      </head>
-                      <body>
-                        <div class="header">
-                          <div class="meta">🐱 Moncho Unschooling · ${form.language}</div>
-                          <h1>${form.theme} Unit Study</h1>
-                          <div class="angle">"${result.creative_angle}"</div>
-                          <div class="meta" style="margin-top:12px">Subjects: ${result.subjects_included?.join(' · ')}</div>
-                        </div>
-                        <pre>${result.output.replace(/---/g, '</pre><hr style="border:none;border-top:3px solid #1D9E75;margin:28px 0;opacity:0.4"><pre>')}</pre>
-                        <div class="footer">By Alba Nory de González · Moncho Unschooling · monchounschooling.com</div>
-                      </body>
-                    </html>
-                  `)
-                  printWindow.document.close()
-                  printWindow.print()
-                }}
-                style={{
-                  background: '#1D9E75', color: 'white', padding: '14px 24px',
-                  borderRadius: '100px', border: 'none', fontSize: '15px',
-                  fontWeight: 700, cursor: 'pointer', fontFamily: 'Georgia, serif',
-                }}
-              >
-                📥 Download PDF
-              </button>
+              <p style={{ fontSize: '12px', color: GRAY, textAlign: 'center', marginTop: '8px' }}>
+                Opens print dialog — save as PDF or print directly
+              </p>
             </div>
           </div>
         )}
