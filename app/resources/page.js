@@ -2,498 +2,373 @@
 
 import { useState } from 'react'
 
-// ── FILTER DEFINITIONS ────────────────────────────────────────
-
-const TOPICS = [
-  { id: 'all',       label: '✨ All Topics' },
-  { id: 'nature',    label: '🌿 Nature' },
-  { id: 'history',   label: '📜 History' },
-  { id: 'science',   label: '🔬 Science' },
-  { id: 'art',       label: '🎨 Art' },
-  { id: 'geography', label: '🗺️ Geography' },
-  { id: 'math',      label: '📊 Math' },
-  { id: 'language',  label: '📖 Language Arts' },
+const CATEGORIES = [
+  { id: 'all',    label: '✨ All' },
+  { id: 'books',  label: '📚 Books' },
+  { id: 'gadgets',label: '🔬 Educational Gadgets' },
+  { id: 'games',  label: '🎲 Games & Puzzles' },
 ]
-
-const BOOK_TYPES = [
-  { id: 'all',        label: '✨ All Types' },
-  { id: 'living',     label: '📖 Living Book' },
-  { id: 'biography',  label: '👤 Biography' },
-  { id: 'fiction',    label: '🌙 Fiction' },
-  { id: 'field',      label: '🔍 Field Guide' },
-  { id: 'reference',  label: '📚 Reference / Encyclopedia' },
-  { id: 'poetry',     label: '🎵 Poetry & Literature' },
-  { id: 'mythology',  label: '🎭 Mythology & Folklore' },
-]
-
-const GAME_TYPES = [
-  { id: 'all',        label: '✨ All Types' },
-  { id: 'strategy',   label: '♟️ Strategy' },
-  { id: 'logic',      label: '🧩 Logic & Puzzles' },
-  { id: 'cooperative',label: '🤝 Cooperative' },
-  { id: 'memory',     label: '🧠 Memory' },
-  { id: 'language',   label: '📝 Language & Literacy' },
-  { id: 'science',    label: '🔬 Science & Nature' },
-  { id: 'history',    label: '🗺️ History & Geography' },
-  { id: 'math',       label: '📊 Math & Numbers' },
-]
-
-const GAME_PLAYERS = [
-  { id: 'all',   label: '✨ All' },
-  { id: 'solo',  label: '🧒 Solo' },
-  { id: 'duo',   label: '👫 2 Players' },
-  { id: 'group', label: '👨‍👩‍👧‍👦 Family / Group' },
-]
-
-const KIT_TYPES = [
-  { id: 'all',        label: '✨ All Types' },
-  { id: 'biology',    label: '🌱 Live Science & Biology' },
-  { id: 'chemistry',  label: '⚗️ Chemistry' },
-  { id: 'physics',    label: '⚡ Physics & Electronics' },
-  { id: 'astronomy',  label: '🔭 Astronomy' },
-  { id: 'coding',     label: '🤖 Coding & Robotics' },
-  { id: 'math',       label: '🧮 Math Manipulatives' },
-  { id: 'montessori', label: '🌿 Montessori Materials' },
-  { id: 'earth',      label: '🌍 Earth & Environment' },
-]
-
-const ART_MEDIUMS = [
-  { id: 'all',      label: '✨ All' },
-  { id: 'drawing',  label: '✏️ Drawing' },
-  { id: 'painting', label: '🖌️ Painting' },
-  { id: 'sculpting',label: '🏺 Sculpting' },
-  { id: 'mixed',    label: '🎨 Mixed Media' },
-]
-
-const AGES = [
-  { id: 'all',  label: '✨ All Ages' },
-  { id: '4-7',  label: '🌱 4-7 years' },
-  { id: '8-12', label: '📚 8-12 years' },
-  { id: '12+',  label: '🎓 12+ years' },
-]
-
-// ── RESOURCE DATA ─────────────────────────────────────────────
 
 const RESOURCES = [
-  // ── BOOKS ──────────────────────────────────────────
-  {
-    id: 1, category: 'books',
-    title: 'Handbook of Nature Study',
-    author: 'Anna Botsford Comstock',
+  // ── BOOKS ──────────────────────────────────────────────────────────────────
+
+  // Living Books
+  { id: 1, category: 'books', emoji: '🌿',
+    title: 'Handbook of Nature Study', author: 'Anna Botsford Comstock',
     description: 'The ultimate nature study companion — 900 pages of field observations, drawings, and lesson guides for every creature and plant you\'ll encounter outdoors.',
-    bookType: 'reference', topics: ['nature', 'science'],
-    emoji: '🌿', age: '8+', ageGroup: '8-12',
-    searchUrl: 'https://www.amazon.com/s?k=Handbook+of+Nature+Study+Comstock',
     highlight: 'Charlotte Mason essential',
-  },
-  {
-    id: 2, category: 'books',
-    title: 'The Burgess Bird Book for Children',
-    author: 'Thornton W. Burgess',
-    description: 'A living book classic — stories about birds told through the eyes of a curious boy, making ornithology feel like an adventure, not a lesson.',
-    bookType: 'living', topics: ['nature', 'science'],
-    emoji: '🐦', age: '6-12', ageGroup: '4-7',
-    searchUrl: 'https://www.amazon.com/s?k=Burgess+Bird+Book+Children',
+    url: 'https://www.amazon.com/s?k=Handbook+of+Nature+Study+Comstock' },
+
+  { id: 2, category: 'books', emoji: '🐦',
+    title: 'The Burgess Bird Book for Children', author: 'Thornton W. Burgess',
+    description: 'Stories about birds told through the eyes of a curious boy — science and storytelling woven together so naturally you forget you\'re learning.',
     highlight: 'Living book classic',
-  },
-  {
-    id: 3, category: 'books',
-    title: 'A Child\'s History of the World',
-    author: 'V. M. Hillyer',
+    url: 'https://www.amazon.com/s?k=Burgess+Bird+Book+Children' },
+
+  { id: 3, category: 'books', emoji: '📜',
+    title: 'A Child\'s History of the World', author: 'V. M. Hillyer',
     description: 'History as it should be told — as a story. From ancient civilizations to modern times, written for curious minds who want to understand how we got here.',
-    bookType: 'living', topics: ['history', 'geography'],
-    emoji: '📜', age: '8-14', ageGroup: '8-12',
-    searchUrl: 'https://www.amazon.com/s?k=Child+History+World+Hillyer',
     highlight: 'Narrative history',
-  },
-  {
-    id: 4, category: 'books',
-    title: 'An Extraordinary Life: The Story of a Monarch Butterfly',
-    author: 'Laurence Pringle',
-    description: 'Follow one Monarch butterfly from egg to migration in vivid detail. Perfect companion for any butterfly or migration unit study.',
-    bookType: 'living', topics: ['nature', 'science', 'geography'],
-    emoji: '🦋', age: '8-12', ageGroup: '8-12',
-    searchUrl: 'https://www.amazon.com/s?k=Extraordinary+Life+Monarch+Butterfly+Pringle',
+    url: 'https://www.amazon.com/s?k=Child+History+World+Hillyer' },
+
+  { id: 4, category: 'books', emoji: '🦋',
+    title: 'An Extraordinary Life: The Story of a Monarch Butterfly', author: 'Laurence Pringle',
+    description: 'Follow one Monarch butterfly from egg to migration in vivid detail. The perfect companion for any butterfly or migration unit study.',
     highlight: 'Unit study companion',
-  },
-  {
-    id: 5, category: 'books',
-    title: 'D\'Aulaires\' Book of Greek Myths',
-    author: 'Ingri and Edgar Parin d\'Aulaire',
-    description: 'The most beloved introduction to Greek mythology. Gorgeous hand-lithographed illustrations bring the gods and heroes to life in a way no textbook ever could.',
-    bookType: 'mythology', topics: ['history', 'language'],
-    emoji: '⚡', age: '6-adult', ageGroup: '4-7',
-    searchUrl: 'https://www.amazon.com/s?k=D+Aulaires+Book+Greek+Myths',
-    highlight: 'Mythology classic',
-  },
-  {
-    id: 6, category: 'books',
-    title: 'National Audubon Society Field Guides',
-    author: 'Audubon Society',
-    description: 'The best field guides for real naturalist work. Birds, insects, wildflowers, rocks — get the one for your region and take it everywhere.',
-    bookType: 'field', topics: ['nature', 'science'],
-    emoji: '🔍', age: '8-adult', ageGroup: '8-12',
-    searchUrl: 'https://www.amazon.com/s?k=Audubon+Society+field+guide',
-    highlight: 'Real naturalist tool',
-  },
-  {
-    id: 7, category: 'books',
-    title: 'The Story of the World',
-    author: 'Susan Wise Bauer',
-    description: 'A narrative history of the world from ancient times to the modern age. Told as stories, not lectures. A homeschooling family favorite.',
-    bookType: 'living', topics: ['history', 'geography'],
-    emoji: '🌍', age: '6-14', ageGroup: '4-7',
-    searchUrl: 'https://www.amazon.com/s?k=Story+of+the+World+Susan+Wise+Bauer',
+    url: 'https://www.amazon.com/s?k=Extraordinary+Life+Monarch+Butterfly+Pringle' },
+
+  { id: 5, category: 'books', emoji: '🌍',
+    title: 'The Story of the World', author: 'Susan Wise Bauer',
+    description: 'A narrative history of the world from ancient times to the modern age. Told as stories, not lectures. A homeschooling family staple.',
     highlight: 'History as story',
-  },
-  {
-    id: 8, category: 'books',
-    title: 'DK Eyewitness Encyclopedia Series',
-    author: 'DK Publishing',
-    description: 'Stunning visual reference books on every subject — animals, space, history, science. The best encyclopedia series for visual learners.',
-    bookType: 'reference', topics: ['science', 'history', 'nature', 'geography'],
-    emoji: '📚', age: '7-adult', ageGroup: '8-12',
-    searchUrl: 'https://www.amazon.com/s?k=DK+Eyewitness+encyclopedia',
-    highlight: 'Visual reference',
-  },
-  {
-    id: 9, category: 'books',
-    title: 'Farmer Boy',
-    author: 'Laura Ingalls Wilder',
-    description: 'A year in the life of a farm boy in upstate New York — full of real food, real work, real seasons. Living history through story.',
-    bookType: 'fiction', topics: ['history', 'nature'],
-    emoji: '🌾', age: '7-12', ageGroup: '4-7',
-    searchUrl: 'https://www.amazon.com/s?k=Farmer+Boy+Laura+Ingalls+Wilder',
-    highlight: 'Historical fiction',
-  },
-  {
-    id: 10, category: 'books',
-    title: 'Who Was? Biography Series',
-    author: 'Various Authors',
+    url: 'https://www.amazon.com/s?k=Story+of+the+World+Susan+Wise+Bauer' },
+
+  { id: 6, category: 'books', emoji: '🌸',
+    title: 'The Story of Ferdinand', author: 'Munro Leaf',
+    description: 'A gentle bull who prefers smelling flowers to fighting. A quiet, beautiful story about being true to yourself — beloved by children and adults for generations.',
+    highlight: 'Gentle classic',
+    url: 'https://www.amazon.com/s?k=Story+of+Ferdinand+Munro+Leaf' },
+
+  { id: 7, category: 'books', emoji: '🦀',
+    title: 'Pagoo', author: 'Holling C. Holling',
+    description: 'The life of a hermit crab told with stunning detail and gorgeous illustrations. Science, ecology, and storytelling woven into one unforgettable book.',
+    highlight: 'Ocean science story',
+    url: 'https://www.amazon.com/s?k=Pagoo+Holling+C+Holling' },
+
+  { id: 8, category: 'books', emoji: '🛶',
+    title: 'Paddle-to-the-Sea', author: 'Holling C. Holling',
+    description: 'A carved wooden canoe travels from the Great Lakes to the Atlantic Ocean. A geography and ecology adventure in stunning illustrated chapters.',
+    highlight: 'Geography adventure',
+    url: 'https://www.amazon.com/s?k=Paddle+to+the+Sea+Holling' },
+
+  { id: 9, category: 'books', emoji: '🐢',
+    title: 'Minn of the Mississippi', author: 'Holling C. Holling',
+    description: 'A snapping turtle\'s journey down the Mississippi River, exploring river ecosystems, history, and geography through gorgeous detailed illustrations.',
+    highlight: 'River ecosystem story',
+    url: 'https://www.amazon.com/s?k=Minn+of+the+Mississippi+Holling' },
+
+  { id: 10, category: 'books', emoji: '🐦',
+    title: 'The Wheel on the School', author: 'Meindert DeJong',
+    description: 'A Dutch village comes together to bring storks back to their town. A Newbery Medal winner about community, curiosity, and what happens when children ask one good question.',
+    highlight: 'Newbery Medal winner',
+    url: 'https://www.amazon.com/s?k=Wheel+on+the+School+DeJong' },
+
+  // Biographies
+  { id: 11, category: 'books', emoji: '⭐',
+    title: 'Little People Big Dreams Series', author: 'Various Authors',
+    description: 'Beautiful picture book biographies of inspiring figures — Marie Curie, Frida Kahlo, Ada Lovelace, Maya Angelou. Each book follows one person from childhood to their world-changing work.',
+    highlight: 'Inspiring lives',
+    url: 'https://www.amazon.com/s?k=Little+People+Big+Dreams+series' },
+
+  { id: 12, category: 'books', emoji: '🎩',
+    title: 'Lincoln: A Photobiography', author: 'Russell Freedman',
+    description: 'A Newbery Medal biography of Abraham Lincoln told with rare photographs and primary sources. History that feels like a story, not a textbook.',
+    highlight: 'Newbery Medal biography',
+    url: 'https://www.amazon.com/s?k=Lincoln+Photobiography+Russell+Freedman' },
+
+  { id: 13, category: 'books', emoji: '🎨',
+    title: 'Diane Stanley Biography Series', author: 'Diane Stanley',
+    description: 'Richly illustrated biographies of historical figures — Leonardo da Vinci, Cleopatra, Shakespeare, Michelangelo. Stunning artwork makes history come alive.',
+    highlight: 'Illustrated biography',
+    url: 'https://www.amazon.com/s?k=Diane+Stanley+biography+illustrated' },
+
+  { id: 14, category: 'books', emoji: '👤',
+    title: 'Who Was? Biography Series', author: 'Various Authors',
     description: 'Short, engaging biographies of famous people from history and science — Marie Curie, Ada Lovelace, Frida Kahlo, Albert Einstein. A new world in every book.',
-    bookType: 'biography', topics: ['history', 'science', 'art'],
-    emoji: '👤', age: '7-12', ageGroup: '8-12',
-    searchUrl: 'https://www.amazon.com/s?k=Who+Was+biography+series',
     highlight: 'Real people, real stories',
-  },
-  {
-    id: 11, category: 'books',
-    title: 'A Child\'s Garden of Verses',
-    author: 'Robert Louis Stevenson',
-    description: 'The most beloved collection of children\'s poetry ever written. Short, musical poems about childhood wonder — perfect for memorization and narration.',
-    bookType: 'poetry', topics: ['language', 'art'],
-    emoji: '🎵', age: '4-10', ageGroup: '4-7',
-    searchUrl: 'https://www.amazon.com/s?k=Child+Garden+Verses+Stevenson',
+    url: 'https://www.amazon.com/s?k=Who+Was+biography+series' },
+
+  // Fiction
+  { id: 15, category: 'books', emoji: '🦅',
+    title: 'My Side of the Mountain', author: 'Jean Craighead George',
+    description: 'A boy runs away to live alone in the Catskill Mountains, training a falcon and learning to survive from nature. The ultimate outdoor survival story for young readers.',
+    highlight: 'Survival in nature',
+    url: 'https://www.amazon.com/s?k=My+Side+of+the+Mountain+Jean+George' },
+
+  { id: 16, category: 'books', emoji: '🏝️',
+    title: 'Island of the Blue Dolphins', author: 'Scott O\'Dell',
+    description: 'Based on a true story — a Native American girl survives alone on a Pacific island for 18 years. Courage, nature, and solitude woven into an unforgettable story.',
+    highlight: 'Based on true story',
+    url: 'https://www.amazon.com/s?k=Island+Blue+Dolphins+Scott+ODell' },
+
+  { id: 17, category: 'books', emoji: '🔢',
+    title: 'The Phantom Tollbooth', author: 'Norton Juster',
+    description: 'A bored boy drives through a magic tollbooth into a land where words and numbers are at war. A wildly funny adventure about the joy of learning and curiosity.',
+    highlight: 'Language & math adventure',
+    url: 'https://www.amazon.com/s?k=Phantom+Tollbooth+Norton+Juster' },
+
+  { id: 18, category: 'books', emoji: '🌹',
+    title: 'The Secret Garden', author: 'Frances Hodgson Burnett',
+    description: 'A lonely girl discovers a hidden garden and brings it back to life — along with herself. A classic about nature, healing, and the magic of growing things.',
+    highlight: 'Nature & healing',
+    url: 'https://www.amazon.com/s?k=Secret+Garden+Frances+Hodgson+Burnett' },
+
+  { id: 19, category: 'books', emoji: '🕷️',
+    title: "Charlotte's Web", author: 'E.B. White',
+    description: 'A spider, a pig, and a little girl. One of the most beloved children\'s novels ever written — about friendship, nature, and the cycle of life.',
+    highlight: 'Beloved classic',
+    url: "https://www.amazon.com/s?k=Charlotte+Web+EB+White" },
+
+  { id: 20, category: 'books', emoji: '🌾',
+    title: 'Farmer Boy', author: 'Laura Ingalls Wilder',
+    description: 'A year in the life of a farm boy in upstate New York — full of real food, real work, real seasons. Living history through story.',
+    highlight: 'Historical fiction',
+    url: 'https://www.amazon.com/s?k=Farmer+Boy+Laura+Ingalls+Wilder' },
+
+  // Poetry & Literature
+  { id: 21, category: 'books', emoji: '✏️',
+    title: 'Where the Sidewalk Ends', author: 'Shel Silverstein',
+    description: 'The most beloved collection of children\'s poetry in the English language. Funny, tender, surprising, and endlessly rereadable.',
+    highlight: 'Poetry everyone loves',
+    url: 'https://www.amazon.com/s?k=Where+the+Sidewalk+Ends+Shel+Silverstein' },
+
+  { id: 22, category: 'books', emoji: '💡',
+    title: 'A Light in the Attic', author: 'Shel Silverstein',
+    description: 'More witty, tender, and ridiculous poems from the master. Perfect for reading aloud, memorizing, and illustrating.',
+    highlight: 'Classic poetry',
+    url: 'https://www.amazon.com/s?k=Light+in+the+Attic+Shel+Silverstein' },
+
+  { id: 23, category: 'books', emoji: '🐻',
+    title: 'Now We Are Six', author: 'A.A. Milne',
+    description: 'Winnie-the-Pooh\'s creator at his most poetic — playful verses about childhood, seasons, and small joys. Perfect for memorization and narration.',
+    highlight: 'Winnie-the-Pooh poet',
+    url: 'https://www.amazon.com/s?k=Now+We+Are+Six+AA+Milne' },
+
+  { id: 24, category: 'books', emoji: '🎵',
+    title: "A Child's Garden of Verses", author: 'Robert Louis Stevenson',
+    description: 'The most beloved collection of children\'s poetry ever written. Short, musical poems about childhood wonder — perfect for memorization.',
     highlight: 'Poetry classic',
-  },
-  {
-    id: 12, category: 'books',
-    title: 'Aesop\'s Fables',
-    author: 'Aesop (various editions)',
+    url: "https://www.amazon.com/s?k=Child+Garden+Verses+Stevenson" },
+
+  // Mythology & Folklore
+  { id: 25, category: 'books', emoji: '⚡',
+    title: "D'Aulaires' Book of Greek Myths", author: 'Ingri and Edgar Parin d\'Aulaire',
+    description: 'The most beloved introduction to Greek mythology. Gorgeous hand-lithographed illustrations bring the gods and heroes to life in a way no textbook ever could.',
+    highlight: 'Mythology classic',
+    url: "https://www.amazon.com/s?k=D+Aulaires+Book+Greek+Myths" },
+
+  { id: 26, category: 'books', emoji: '🌩️',
+    title: 'Norse Myths', author: 'Kevin Crossley-Holland',
+    description: 'The definitive retelling of Norse mythology — Thor, Odin, Loki, and the nine worlds — written with the power and beauty of the original sagas.',
+    highlight: 'Definitive Norse myths',
+    url: 'https://www.amazon.com/s?k=Norse+Myths+Kevin+Crossley-Holland' },
+
+  { id: 27, category: 'books', emoji: '🪓',
+    title: "D'Aulaires' Book of Norse Myths", author: 'Ingri and Edgar Parin d\'Aulaire',
+    description: 'The companion to their beloved Greek Myths — same stunning hand-lithographed illustrations, same accessible storytelling. The Viking world comes alive.',
+    highlight: 'Stunning illustrations',
+    url: "https://www.amazon.com/s?k=D+Aulaires+Book+Norse+Myths" },
+
+  { id: 28, category: 'books', emoji: '🦊',
+    title: "Aesop's Fables", author: 'Aesop (various editions)',
     description: 'Ancient stories, timeless lessons. Each fable is short enough for one sitting, deep enough for a lifetime of reflection.',
-    bookType: 'mythology', topics: ['history', 'language'],
-    emoji: '🦊', age: '5-adult', ageGroup: '4-7',
-    searchUrl: 'https://www.amazon.com/s?k=Aesop+Fables+children+illustrated',
     highlight: 'Timeless wisdom',
-  },
+    url: "https://www.amazon.com/s?k=Aesop+Fables+children+illustrated" },
 
-  // ── GAMES ──────────────────────────────────────────
-  {
-    id: 13, category: 'games',
-    title: 'Timeline Card Game',
-    author: 'Asmodee',
-    description: 'Place historical events in order before your opponents. Sneaks in history, critical thinking, and chronology while everyone is busy having fun.',
-    gameType: 'history', players: 'group', ageGroup: '8-12',
-    emoji: '🃏', age: '8-adult',
-    searchUrl: 'https://www.amazon.com/s?k=Timeline+card+game+Asmodee',
-    highlight: 'History through play',
-  },
-  {
-    id: 14, category: 'games',
-    title: 'Wildcraft! Cooperative Herbal Adventure',
-    author: 'LearningHerbs',
-    description: 'A cooperative board game where players use herbal plants to heal ailments. Teaches 25 plants while playing together — no one loses!',
-    gameType: 'cooperative', players: 'group', ageGroup: '4-7',
-    emoji: '🌱', age: '6-adult',
-    searchUrl: 'https://www.amazon.com/s?k=Wildcraft+herbal+adventure+board+game',
-    highlight: 'Nature + cooperation',
-  },
-  {
-    id: 15, category: 'games',
-    title: 'Rush Hour Logic Puzzle',
-    author: 'ThinkFun',
-    description: 'A solo sliding puzzle game with 40 challenges from beginner to expert. Builds logical thinking and spatial reasoning quietly and independently.',
-    gameType: 'logic', players: 'solo', ageGroup: '8-12',
-    emoji: '🚗', age: '8-adult',
-    searchUrl: 'https://www.amazon.com/s?k=Rush+Hour+ThinkFun+logic+puzzle',
-    highlight: 'Solo logic challenge',
-  },
-  {
-    id: 16, category: 'games',
-    title: 'Hive Pocket',
-    author: 'Gen42',
-    description: 'A two-player strategy game with no board — you build the board as you play. Fast, deep, and endlessly replayable. Perfect for 1-on-1 learning time.',
-    gameType: 'strategy', players: 'duo', ageGroup: '8-12',
-    emoji: '🐝', age: '9-adult',
-    searchUrl: 'https://www.amazon.com/s?k=Hive+Pocket+game+Gen42',
-    highlight: '2-player strategy',
-  },
-  {
-    id: 17, category: 'games',
-    title: 'Bananagrams',
-    author: 'Bananagrams',
-    description: 'Fast-paced word building with letter tiles. Players race to build their own crossword grid. Portable, screenless, and endlessly replayable.',
-    gameType: 'language', players: 'group', ageGroup: '8-12',
-    emoji: '🍌', age: '7-adult',
-    searchUrl: 'https://www.amazon.com/s?k=Bananagrams+word+game',
-    highlight: 'Word building fun',
-  },
-  {
-    id: 18, category: 'games',
-    title: 'Prime Climb Math Game',
-    author: 'Math for Love',
-    description: 'A beautiful board game that makes multiplication, division, and prime numbers feel like an adventure. Designed by mathematicians who love games.',
-    gameType: 'math', players: 'group', ageGroup: '8-12',
-    emoji: '🔢', age: '8-adult',
-    searchUrl: 'https://www.amazon.com/s?k=Prime+Climb+math+game',
-    highlight: 'Math through play',
-  },
-  {
-    id: 19, category: 'games',
-    title: 'Photosynthesis Board Game',
-    author: 'Blue Orange',
-    description: 'A stunning strategy game where players grow trees and compete for sunlight. Teaches ecology, seasons, and strategic thinking through gorgeous forest gameplay.',
-    gameType: 'science', players: 'group', ageGroup: '8-12',
-    emoji: '🌳', age: '8-adult',
-    searchUrl: 'https://www.amazon.com/s?k=Photosynthesis+board+game+Blue+Orange',
-    highlight: 'Ecology + strategy',
-  },
-  {
-    id: 20, category: 'games',
-    title: 'Spot It! (Dobble)',
-    author: 'Asmodee',
-    description: 'A lightning-fast matching game that trains visual perception and focus. Every card has exactly one matching symbol with every other card — pure mathematical magic.',
-    gameType: 'memory', players: 'group', ageGroup: '4-7',
-    emoji: '🎯', age: '4-adult',
-    searchUrl: 'https://www.amazon.com/s?k=Spot+It+Dobble+card+game',
-    highlight: 'Visual memory',
-  },
+  // Reference & Field Guides
+  { id: 29, category: 'books', emoji: '🔍',
+    title: 'National Audubon Society Field Guides', author: 'Audubon Society',
+    description: 'The best field guides for real naturalist work. Birds, insects, wildflowers, rocks — get the one for your region and take it everywhere.',
+    highlight: 'Real naturalist tool',
+    url: 'https://www.amazon.com/s?k=Audubon+Society+field+guide' },
 
-  // ── ART SUPPLIES ───────────────────────────────────
-  {
-    id: 21, category: 'art',
-    title: 'Stockmar Beeswax Crayons',
-    author: 'Stockmar',
-    description: 'Pure beeswax crayons with rich, translucent colors that blend beautifully. Last for years and feel like real art tools, not toys. A Waldorf essential.',
-    medium: 'drawing', ageGroup: '4-7',
-    emoji: '🕯️', age: 'All ages',
-    searchUrl: 'https://www.amazon.com/s?k=Stockmar+Beeswax+Crayons',
-    highlight: 'Waldorf essential',
-  },
-  {
-    id: 22, category: 'art',
-    title: 'Stockmar Watercolor Paints',
-    author: 'Stockmar',
-    description: 'Transparent watercolors made for wet-on-wet painting — the Waldorf technique where paint flows freely on wet paper, creating luminous results.',
-    medium: 'painting', ageGroup: '4-7',
-    emoji: '🌈', age: 'All ages',
-    searchUrl: 'https://www.amazon.com/s?k=Stockmar+Watercolor+Paints',
-    highlight: 'Wet-on-wet painting',
-  },
-  {
-    id: 23, category: 'art',
-    title: 'Natural Beeswax Modeling Wax',
-    author: 'Filana',
-    description: 'Soft, warm beeswax children warm with their hands before molding. Develops fine motor skills while creating beautiful natural sculptures.',
-    medium: 'sculpting', ageGroup: '4-7',
-    emoji: '🐝', age: '5-adult',
-    searchUrl: 'https://www.amazon.com/s?k=natural+beeswax+modeling+wax+children',
-    highlight: 'Sensory & calming',
-  },
-  {
-    id: 24, category: 'art',
-    title: 'Crayola Washable Watercolors',
-    author: 'Crayola',
-    description: 'Affordable, washable watercolors that actually work. Perfect starting point for any art project. Easy to find, easy to use, easy to clean up.',
-    medium: 'painting', ageGroup: '4-7',
-    emoji: '🎨', age: '4+',
-    searchUrl: 'https://www.amazon.com/s?k=Crayola+washable+watercolors',
-    highlight: 'Budget-friendly starter',
-  },
-  {
-    id: 25, category: 'art',
-    title: 'Air-Dry Clay (White)',
-    author: 'Various',
-    description: 'No kiln needed. Sculpt, dry, paint. Perfect for nature-inspired sculptures, butterfly life cycles, volcano models, or any 3D challenge in a Moncho unit study.',
-    medium: 'sculpting', ageGroup: '8-12',
-    emoji: '🏺', age: '5-adult',
-    searchUrl: 'https://www.amazon.com/s?k=white+air+dry+clay+children',
-    highlight: 'No kiln needed',
-  },
-  {
-    id: 26, category: 'art',
-    title: 'Oil Pastels Set',
-    author: 'Mungyo / Pentel',
-    description: 'Rich, vibrant sticks that blend like paint but handle like crayons. Gorgeous for resist techniques, texture work, and expressive mixed media art.',
-    medium: 'mixed', ageGroup: '8-12',
-    emoji: '🖍️', age: '6-adult',
-    searchUrl: 'https://www.amazon.com/s?k=oil+pastels+set+children',
-    highlight: 'Blend & resist',
-  },
+  { id: 30, category: 'books', emoji: '🌿',
+    title: 'Peterson First Guides Series', author: 'Roger Tory Peterson',
+    description: 'Simplified field guides perfect for beginners — birds, wildflowers, insects, rocks. Compact enough to fit in a pocket and clear enough for a child to use independently.',
+    highlight: 'Beginner-friendly',
+    url: 'https://www.amazon.com/s?k=Peterson+First+Guides+field+guide' },
 
-  // ── EDUCATIONAL KITS ───────────────────────────────
-  {
-    id: 27, category: 'kits',
-    title: 'Butterfly Garden with Live Caterpillars',
-    author: 'Insect Lore',
-    description: 'Watch complete metamorphosis happen in your own home. Ships with live caterpillars and a pop-up habitat. The most powerful science lesson we know.',
-    kitType: 'biology', ageGroup: '4-7',
-    emoji: '🦋', age: '5-12',
-    searchUrl: 'https://www.amazon.com/s?k=Insect+Lore+butterfly+garden+live+caterpillars',
-    highlight: 'Real metamorphosis',
-  },
-  {
-    id: 28, category: 'kits',
-    title: 'Kids Microscope with Prepared Slides',
-    author: 'AmScope',
-    description: 'A real microscope (not a toy) that opens up the invisible world. Comes with prepared slides and blank ones for your own specimens.',
-    kitType: 'biology', ageGroup: '8-12',
-    emoji: '🔬', age: '8-adult',
-    searchUrl: 'https://www.amazon.com/s?k=kids+microscope+prepared+slides+AmScope',
-    highlight: 'Real science tool',
-  },
-  {
-    id: 29, category: 'kits',
-    title: 'Atom Building Model Kit',
-    author: 'Various',
-    description: 'Build real atomic structures with colored balls and connectors. Visualize elements, molecules, and chemical bonds in 3D — chemistry you can hold in your hands.',
-    kitType: 'chemistry', ageGroup: '8-12',
-    emoji: '⚛️', age: '10-adult',
-    searchUrl: 'https://www.amazon.com/s?k=atom+model+kit+chemistry+educational',
+  { id: 31, category: 'books', emoji: '📚',
+    title: 'DK Eyewitness Encyclopedia Series', author: 'DK Publishing',
+    description: 'Stunning visual reference books on every subject — animals, space, history, science. The best encyclopedia series for visual learners of any age.',
+    highlight: 'Visual reference',
+    url: 'https://www.amazon.com/s?k=DK+Eyewitness+encyclopedia' },
+
+  { id: 32, category: 'books', emoji: '🌐',
+    title: 'National Geographic Kids Encyclopedia of Science', author: 'National Geographic',
+    description: 'Visually stunning science encyclopedia covering physics, chemistry, biology, earth science, and technology. Perfect for sparking unit study ideas.',
+    highlight: 'Visual science reference',
+    url: 'https://www.amazon.com/s?k=National+Geographic+Kids+Encyclopedia+Science' },
+
+  { id: 33, category: 'books', emoji: '🗺️',
+    title: 'The Usborne Encyclopedia of World History', author: 'Usborne',
+    description: 'A comprehensive illustrated world history encyclopedia organized by time period and region. Clear timelines, maps, and colorful illustrations make history accessible.',
+    highlight: 'Illustrated history',
+    url: 'https://www.amazon.com/s?k=Usborne+Encyclopedia+World+History' },
+
+  // ── EDUCATIONAL GADGETS ────────────────────────────────────────────────────
+
+  { id: 34, category: 'gadgets', emoji: '🏛️',
+    title: 'Build Ancient Buildings Kit', author: 'Various',
+    description: 'Reconstruct iconic ancient buildings — the Colosseum, the Parthenon, the Pyramids — using detailed model kits. Architecture, history, and engineering in one project.',
+    highlight: 'History + engineering',
+    url: 'https://www.amazon.com/s?k=build+ancient+buildings' },
+
+  { id: 35, category: 'gadgets', emoji: '🌍',
+    title: 'Solar System Orbital Model Kit', author: 'Various',
+    description: 'A mechanized model showing the Earth-Moon-Sun orbital system in motion. Watch the seasons, eclipses, and day/night cycles happen in real time on your desk.',
+    highlight: 'Astronomy in motion',
+    url: 'https://www.amazon.com/s?k=English+Solar+System+Sun+Earth+Moon+Orbital+Model+Educational+Planetarium' },
+
+  { id: 36, category: 'gadgets', emoji: '🧬',
+    title: 'Animal & Plant Cell Anatomy Model', author: 'Various',
+    description: 'Detailed 3D models of animal and plant cells showing organelles in color. Touch and explore what biology textbooks can only illustrate.',
+    highlight: 'Biology made visible',
+    url: 'https://www.amazon.com/s?k=Animal+and+Plant+Cell+Anatomy+Model' },
+
+  { id: 37, category: 'gadgets', emoji: '⚛️',
+    title: 'Chemistry Molecular Model Kit', author: 'Various',
+    description: 'Build real molecular structures with colored balls and connectors. Visualize elements, molecules, and chemical bonds in 3D — chemistry you can hold in your hands.',
     highlight: 'Chemistry in 3D',
-  },
-  {
-    id: 30, category: 'kits',
-    title: 'Snap Circuits Electronics Kit',
-    author: 'Elenco',
-    description: 'Build real working circuits with snap-together components — no soldering needed. Kids build radios, lights, alarms, and more while learning electronics fundamentals.',
-    kitType: 'physics', ageGroup: '8-12',
-    emoji: '⚡', age: '8-adult',
-    searchUrl: 'https://www.amazon.com/s?k=Snap+Circuits+electronics+kit+Elenco',
-    highlight: 'Real circuits',
-  },
-  {
-    id: 31, category: 'kits',
-    title: 'Telescope for Kids — Beginner',
-    author: 'Gskyer / National Geographic',
-    description: 'A real refractor telescope sized for young astronomers. See craters on the moon, Saturn\'s rings, and Jupiter\'s moons with your own eyes.',
-    kitType: 'astronomy', ageGroup: '8-12',
-    emoji: '🔭', age: '8-adult',
-    searchUrl: 'https://www.amazon.com/s?k=telescope+for+kids+beginner+moon',
-    highlight: 'See the moon up close',
-  },
-  {
-    id: 32, category: 'kits',
-    title: 'Solar System Model Kit',
-    author: 'Various',
-    description: 'Paint and assemble a hanging model of all 8 planets to scale. Goes from craft project to science tool — how big is Jupiter compared to Earth?',
-    kitType: 'astronomy', ageGroup: '4-7',
-    emoji: '🪐', age: '6-adult',
-    searchUrl: 'https://www.amazon.com/s?k=solar+system+model+kit+paint',
-    highlight: 'Scale model',
-  },
-  {
-    id: 33, category: 'kits',
-    title: 'Coding Robot — Botley or Ozobot',
-    author: 'Learning Resources / Ozobot',
-    description: 'Screen-free coding robots that introduce sequencing, loops, and logical thinking through physical play. No tablet needed — draw paths and give commands with cards.',
-    kitType: 'coding', ageGroup: '4-7',
-    emoji: '🤖', age: '5-12',
-    searchUrl: 'https://www.amazon.com/s?k=Botley+coding+robot+screen+free',
-    highlight: 'Screen-free coding',
-  },
-  {
-    id: 34, category: 'kits',
-    title: 'Sandpaper Letters — Lowercase',
-    author: 'Montessori Services',
-    description: 'The classic Montessori reading material. Children trace letters with their fingers, learning through touch, sight, and sound simultaneously.',
-    kitType: 'montessori', ageGroup: '4-7',
-    emoji: '🔤', age: '3-6',
-    searchUrl: 'https://www.amazon.com/s?k=Montessori+sandpaper+letters+lowercase',
-    highlight: 'Multi-sensory reading',
-  },
-  {
-    id: 35, category: 'kits',
-    title: 'Wooden Counting Beads & Number Rods',
-    author: 'Montessori Services',
-    description: 'Hands-on math the Montessori way — count, sort, add, and multiply with tactile beads that make abstract numbers concrete and real.',
-    kitType: 'montessori', ageGroup: '4-7',
-    emoji: '🧮', age: '4-9',
-    searchUrl: 'https://www.amazon.com/s?k=Montessori+wooden+counting+beads+math',
-    highlight: 'Concrete math',
-  },
+    url: 'https://www.amazon.com/s?k=Chemistry+Molecular+Model' },
 
-  // ── NATURE TOOLS ───────────────────────────────────
-  {
-    id: 36, category: 'nature',
-    title: 'Children\'s Nature Journal',
-    author: 'Various',
-    description: 'A blank journal with prompts for nature observation — date, weather, location, sketch, and notes. The cornerstone of any Charlotte Mason practice.',
-    ageGroup: '4-7',
-    emoji: '📓', age: '6-adult',
-    searchUrl: 'https://www.amazon.com/s?k=children+nature+journal+blank',
-    highlight: 'Charlotte Mason essential',
-  },
-  {
-    id: 37, category: 'nature',
-    title: 'Kids Bug Catching Kit',
-    author: 'Various',
-    description: 'Magnifying glass, net, collection containers, and tweezers — everything needed to catch, observe, and release insects safely.',
-    ageGroup: '4-7',
-    emoji: '🐛', age: '4-12',
-    searchUrl: 'https://www.amazon.com/s?k=kids+bug+catching+kit+magnifying+glass',
-    highlight: 'Outdoor exploration',
-  },
-  {
-    id: 38, category: 'nature',
-    title: 'Hand Lens / Loupe Magnifier 10x',
-    author: 'Various',
-    description: 'A real jeweler\'s loupe that fits in a pocket. See the veins in a leaf, the scales on a butterfly wing, the cells in a piece of onion skin. The world gets bigger.',
-    ageGroup: '8-12',
-    emoji: '🔎', age: '6-adult',
-    searchUrl: 'https://www.amazon.com/s?k=hand+lens+loupe+10x+naturalist',
-    highlight: 'See the invisible',
-  },
-  {
-    id: 39, category: 'nature',
-    title: 'Children\'s Waterproof Rain Boots',
-    author: 'Various',
-    description: 'The most important piece of Forest School equipment. When you\'re not afraid of mud, you\'ll explore anywhere. The best outdoor learning investment you can make.',
-    ageGroup: '4-7',
-    emoji: '🥾', age: '2-adult',
-    searchUrl: 'https://www.amazon.com/s?k=children+waterproof+rain+boots',
-    highlight: 'Mud-ready explorer',
-  },
-  {
-    id: 40, category: 'nature',
-    title: 'Backyard Bird Feeder + Seed',
-    author: 'Various',
-    description: 'Turn any window into a nature observation station. Bird feeders bring the wild world close enough to sketch and identify from indoors.',
-    ageGroup: '4-7',
-    emoji: '🐦', age: 'All ages',
-    searchUrl: 'https://www.amazon.com/s?k=backyard+bird+feeder+seed+children',
-    highlight: 'Window nature study',
-  },
-]
+  { id: 38, category: 'gadgets', emoji: '💻',
+    title: "Let's Start Coding Kit", author: "Let's Start Coding",
+    description: 'A real C++ coding kit for kids — write actual code that makes LEDs blink, buzzers beep, and motors spin. No screens needed. Real hardware, real programming.',
+    highlight: 'Real coding, real hardware',
+    url: 'https://www.amazon.com/stores/LetsStartCoding/page/EEBC3559-DA4A-47D6-A926-BA891048B93D' },
 
-// ── SECTIONS ──────────────────────────────────────────────────
+  { id: 39, category: 'gadgets', emoji: '⚡',
+    title: 'Snap Circuits Jr. SC-100', author: 'Elenco',
+    description: 'Build real working circuits with snap-together components — over 100 projects, no soldering needed. Kids build radios, lights, alarms while learning electronics fundamentals.',
+    highlight: 'Real circuits, 100+ projects',
+    url: 'https://www.amazon.com/s?k=Snap+Circuits+Jr.+SC-100+Electronics+Exploration+Kit' },
 
-const SECTIONS = [
-  { id: 'books',  label: '📚 Books' },
-  { id: 'games',  label: '🎲 Games & Puzzles' },
-  { id: 'art',    label: '🎨 Art Supplies' },
-  { id: 'kits',   label: '🔬 Educational Kits' },
-  { id: 'nature', label: '🌿 Nature Tools' },
+  { id: 40, category: 'gadgets', emoji: '☀️',
+    title: 'Green Energy Model Kit', author: 'Various',
+    description: 'Build working models of solar panels, wind turbines, and water wheels. Explore renewable energy through hands-on experimentation — the science of the future, today.',
+    highlight: 'Renewable energy',
+    url: 'https://www.amazon.com/s?k=green+energy+model' },
+
+  { id: 41, category: 'gadgets', emoji: '🫀',
+    title: 'Squishy Human Body Kit', author: 'Various',
+    description: 'A tactile, squeezable human body model with removable organs. Perfect for kinesthetic learners — feel where the heart, lungs, and stomach actually sit.',
+    highlight: 'Tactile anatomy',
+    url: 'https://www.amazon.com/s?k=squishy+human+body' },
+
+  { id: 42, category: 'gadgets', emoji: '⚗️',
+    title: 'Chemistry Science Kit', author: 'Various',
+    description: 'Conduct real chemistry experiments at home — acids and bases, crystallization, color reactions. Comes with safe chemicals, equipment, and experiment guides.',
+    highlight: 'Real experiments',
+    url: 'https://www.amazon.com/s?k=chemistry+science+kit' },
+
+  { id: 43, category: 'gadgets', emoji: '🪨',
+    title: 'Rock & Geology Science Kit', author: 'Various',
+    description: 'Dig, identify, and classify real rocks and minerals. Includes specimen collection, magnifying tools, and identification guides for young geologists.',
+    highlight: 'Real rock specimens',
+    url: 'https://www.amazon.com/s?k=rock+science+kit' },
+
+  { id: 44, category: 'gadgets', emoji: '🎱',
+    title: 'GraviTrax Starter Set', author: 'Ravensburger',
+    description: 'A gravity-and-magnetic marble run that teaches physics through building. Design tracks, test hypotheses, and watch physics principles come alive. STEM-accredited for ages 8+.',
+    highlight: 'Physics through building',
+    url: 'https://www.amazon.com/s?k=Ravensburger+GraviTrax+Starter+Set' },
+
+  { id: 45, category: 'gadgets', emoji: '🌍',
+    title: 'ScrunchMap — USA Scrunchable Map', author: 'Waypoint Geographic',
+    description: 'A soft, scrunchable fabric map that kids can touch, fold, and explore without tearing. Great for tactile geography learners — hang it, spread it, or scrunch it up.',
+    highlight: 'Tactile geography',
+    url: 'https://www.amazon.com/Waypoint-Geographic-USA-ScrunchMap-Date/dp/B00JG8M4BK' },
+
+  { id: 46, category: 'gadgets', emoji: '🚩',
+    title: 'Poppik World Map with Flag Stickers', author: 'Poppik',
+    description: 'A giant poster map where children place 230 country flag stickers in their correct locations. Geography + flags + fine motor skills — all in one beautiful project.',
+    highlight: '230 flag stickers',
+    url: 'https://www.amazon.com/Poppik-Discovery-Sticker-Flags-World/dp/B07TK8ZD6H' },
+
+  // ── GAMES & PUZZLES ────────────────────────────────────────────────────────
+
+  { id: 47, category: 'games', emoji: '🌊',
+    title: 'Ecosystem: Habitats Board Game', author: 'Genius Games',
+    description: 'Build a living ecosystem by placing habitat cards — oceans, forests, wetlands. Balance predators, prey, and environments in a beautifully illustrated card drafting game.',
+    highlight: 'Ecology + strategy',
+    url: 'https://www.amazon.com/Ecosystem-Habitats-Classroom-Environments-Underwater/dp/B0BB4VXV1K' },
+
+  { id: 48, category: 'games', emoji: '⚗️',
+    title: 'Periodic: A Game of the Elements', author: 'Genius Games',
+    description: 'Race across the periodic table using element properties and atomic energy. A scientifically accurate strategy game that makes chemistry feel like an adventure.',
+    highlight: 'Periodic table comes alive',
+    url: 'https://www.amazon.com/Genius-Games-Periodic-Game-Elements/dp/B07KBG6DVW' },
+
+  { id: 49, category: 'games', emoji: '🧬',
+    title: 'Cytosis: A Cell Biology Game', author: 'Genius Games',
+    description: 'Work inside a human cell — collect resources, build proteins, and fight viruses. Scientifically accurate cell biology strategy game for ages 10 and up.',
+    highlight: 'Scientifically accurate',
+    url: 'https://www.amazon.com/Cytosis-Biology-Strategy-Accurate-Science/dp/B076V9CYW7' },
+
+  { id: 50, category: 'games', emoji: '🗺️',
+    title: 'QUOKKA World Geography Board Game', author: 'Quokka',
+    description: 'Learn countries, capitals, and world geography through competitive gameplay. Cards, maps, and trivia make geography feel like a race around the world.',
+    highlight: 'Geography through play',
+    url: 'https://www.amazon.com/QUOKKA-Geography-Board-Game-Kids/dp/B0CGJ3X473' },
+
+  { id: 51, category: 'games', emoji: '🦁',
+    title: 'Skillmatics Animal World Card Game', author: 'Skillmatics',
+    description: 'A fast-paced, screen-free card game about animals — their habitats, diets, and characteristics. Perfect for nature unit studies and family game night.',
+    highlight: 'Animal facts through play',
+    url: 'https://www.amazon.com/Skillmatics-Animal-Perfect-Animals-Screen-Free/dp/B07RMJ8SG6' },
+
+  { id: 52, category: 'games', emoji: '🌱',
+    title: 'Wildcraft! Herbal Adventure Game', author: 'LearningHerbs',
+    description: 'A cooperative board game where players use herbal plants to heal ailments and get everyone home safely. Teaches 25 real plants while playing together — no one loses!',
+    highlight: 'Herbology + cooperation',
+    url: 'https://www.amazon.com/Wildcraft-Herbal-Adventure-cooperative-board/dp/B001M9JD9W' },
+
+  { id: 53, category: 'games', emoji: '🤖',
+    title: 'Makeblock mBot Robot Kit', author: 'Makeblock',
+    description: 'Build a real programmable robot using Scratch and Arduino coding. Sensors, motors, and wireless control — a complete introduction to robotics and coding for kids.',
+    highlight: 'Real robotics + coding',
+    url: 'https://www.amazon.com/Makeblock-Robotics-Scratch-Arduino-Coding/dp/B00SK5RUQY' },
+
+  { id: 54, category: 'games', emoji: '🃏',
+    title: 'Timeline Card Game', author: 'Asmodee',
+    description: 'Place historical events in order before your opponents. Sneaks in history, critical thinking, and chronology while everyone is busy having fun.',
+    highlight: 'History through play',
+    url: 'https://www.amazon.com/s?k=Timeline+card+game+Asmodee' },
+
+  { id: 55, category: 'games', emoji: '🚗',
+    title: 'Rush Hour Logic Puzzle', author: 'ThinkFun',
+    description: 'A solo sliding puzzle game with 40 challenges from beginner to expert. Builds logical thinking and spatial reasoning quietly and independently.',
+    highlight: 'Solo logic challenge',
+    url: 'https://www.amazon.com/s?k=Rush+Hour+ThinkFun+logic+puzzle' },
+
+  { id: 56, category: 'games', emoji: '🌳',
+    title: 'Photosynthesis Board Game', author: 'Blue Orange',
+    description: 'A stunning strategy game where players grow trees and compete for sunlight. Teaches ecology, seasons, and strategic thinking through gorgeous forest gameplay.',
+    highlight: 'Ecology + strategy',
+    url: 'https://www.amazon.com/s?k=Photosynthesis+board+game+Blue+Orange' },
+
+  { id: 57, category: 'games', emoji: '🔢',
+    title: 'Prime Climb Math Game', author: 'Math for Love',
+    description: 'A beautiful board game that makes multiplication, division, and prime numbers feel like an adventure. Designed by mathematicians who love games.',
+    highlight: 'Math through play',
+    url: 'https://www.amazon.com/s?k=Prime+Climb+math+game' },
+
+  { id: 58, category: 'games', emoji: '🍌',
+    title: 'Bananagrams', author: 'Bananagrams',
+    description: 'Fast-paced word building with letter tiles. Players race to build their own crossword grid. Portable, screenless, and endlessly replayable.',
+    highlight: 'Word building fun',
+    url: 'https://www.amazon.com/s?k=Bananagrams+word+game' },
 ]
 
 const GREEN  = '#1D9E75'
@@ -501,38 +376,6 @@ const DARK   = '#085041'
 const CREAM  = '#F7F4EF'
 const BORDER = '#E8E4DC'
 const GRAY   = '#5F5E5A'
-
-// ── FILTER BAR ────────────────────────────────────────────────
-
-function FilterBar({ label, options, active, onSelect }) {
-  return (
-    <div style={{ marginBottom: '14px' }}>
-      <p style={{ fontSize: '11px', color: GRAY, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '8px' }}>
-        {label}
-      </p>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-        {options.map(opt => (
-          <button
-            key={opt.id}
-            onClick={() => onSelect(opt.id)}
-            style={{
-              padding: '6px 14px', borderRadius: '100px', cursor: 'pointer',
-              border: `2px solid ${active === opt.id ? GREEN : BORDER}`,
-              background: active === opt.id ? GREEN : 'white',
-              color: active === opt.id ? 'white' : GRAY,
-              fontWeight: active === opt.id ? 700 : 400,
-              fontSize: '13px', fontFamily: 'Georgia, serif',
-            }}
-          >
-            {opt.label}
-          </button>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-// ── RESOURCE CARD ─────────────────────────────────────────────
 
 function ResourceCard({ r }) {
   return (
@@ -558,17 +401,11 @@ function ResourceCard({ r }) {
         <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#1A1A1A', marginBottom: '3px', lineHeight: 1.3 }}>
           {r.title}
         </h3>
-        <p style={{ fontSize: '12px', color: GREEN, fontStyle: 'italic' }}>
-          {r.author} · {r.age}
-        </p>
+        <p style={{ fontSize: '12px', color: GREEN, fontStyle: 'italic' }}>{r.author}</p>
       </div>
-      <p style={{ fontSize: '13px', color: GRAY, lineHeight: 1.6, flex: 1 }}>
-        {r.description}
-      </p>
+      <p style={{ fontSize: '13px', color: GRAY, lineHeight: 1.6, flex: 1 }}>{r.description}</p>
       <a
-        href={r.searchUrl}
-        target="_blank"
-        rel="noopener noreferrer"
+        href={r.url} target="_blank" rel="noopener noreferrer"
         style={{
           display: 'block', textAlign: 'center',
           background: GREEN, color: 'white',
@@ -585,36 +422,12 @@ function ResourceCard({ r }) {
   )
 }
 
-// ── PAGE ──────────────────────────────────────────────────────
-
 export default function ResourcesPage() {
-  const [section,   setSection]   = useState('books')
-  const [topic,     setTopic]     = useState('all')
-  const [bookType,  setBookType]  = useState('all')
-  const [gameType,  setGameType]  = useState('all')
-  const [players,   setPlayers]   = useState('all')
-  const [kitType,   setKitType]   = useState('all')
-  const [medium,    setMedium]    = useState('all')
-  const [age,       setAge]       = useState('all')
+  const [active, setActive] = useState('all')
 
-  function switchSection(id) {
-    setSection(id)
-    setTopic('all'); setBookType('all'); setGameType('all')
-    setPlayers('all'); setKitType('all'); setMedium('all'); setAge('all')
-  }
-
-  const pool = RESOURCES.filter(r => r.category === section)
-
-  const filtered = pool.filter(r => {
-    if (topic    !== 'all' && !r.topics?.includes(topic))   return false
-    if (age      !== 'all' && r.ageGroup !== age)           return false
-    if (section === 'books'  && bookType !== 'all' && r.bookType !== bookType) return false
-    if (section === 'games'  && gameType !== 'all' && r.gameType !== gameType) return false
-    if (section === 'games'  && players  !== 'all' && r.players  !== players)  return false
-    if (section === 'kits'   && kitType  !== 'all' && r.kitType  !== kitType)  return false
-    if (section === 'art'    && medium   !== 'all' && r.medium   !== medium)   return false
-    return true
-  })
+  const filtered = active === 'all'
+    ? RESOURCES
+    : RESOURCES.filter(r => r.category === active)
 
   return (
     <main style={{ minHeight: '100vh', background: CREAM, fontFamily: 'Georgia, serif' }}>
@@ -628,9 +441,9 @@ export default function ResourcesPage() {
           🐱 Moncho
         </a>
         <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-          <a href="/generate"  style={{ fontSize: '14px', color: GRAY, textDecoration: 'none' }}>Generate</a>
-          <a href="/dashboard" style={{ fontSize: '14px', color: GRAY, textDecoration: 'none' }}>My Studies</a>
-          <a href="/pricing"   style={{ fontSize: '14px', color: GRAY, textDecoration: 'none' }}>Pricing</a>
+          <a href="/generate"   style={{ fontSize: '14px', color: GRAY, textDecoration: 'none' }}>Generate</a>
+          <a href="/dashboard"  style={{ fontSize: '14px', color: GRAY, textDecoration: 'none' }}>My Studies</a>
+          <a href="/pricing"    style={{ fontSize: '14px', color: GRAY, textDecoration: 'none' }}>Pricing</a>
         </div>
       </nav>
 
@@ -640,85 +453,43 @@ export default function ResourcesPage() {
           Moncho Recommends
         </p>
         <h1 style={{ fontSize: '44px', fontWeight: 700, letterSpacing: '-1px', marginBottom: '12px' }}>
-          Tools for Curious Learners
+          Educational Resources
         </h1>
         <p style={{ fontSize: '17px', opacity: 0.8, maxWidth: '520px', margin: '0 auto 20px', lineHeight: 1.6 }}>
-          Every book, kit, and game here was chosen because it sparks real curiosity — not because it looks good in a catalog.
+          Every book, gadget, and game here was chosen because it sparks real curiosity — not because it looks good in a catalog.
         </p>
         <p style={{
-          fontSize: '11px', opacity: 0.4,
-          display: 'inline-block', padding: '5px 14px',
-          background: 'rgba(255,255,255,0.1)', borderRadius: '20px',
+          fontSize: '11px', opacity: 0.4, display: 'inline-block',
+          padding: '5px 14px', background: 'rgba(255,255,255,0.1)', borderRadius: '20px',
         }}>
           Some links are affiliate links — we earn a small commission at no cost to you 🐱
         </p>
       </div>
 
-      {/* SECTION TABS */}
-      <div style={{ background: 'white', borderBottom: `1px solid ${BORDER}`, padding: '0 24px', overflowX: 'auto' }}>
-        <div style={{ display: 'flex', maxWidth: '960px', margin: '0 auto' }}>
-          {SECTIONS.map(s => (
-            <button
-              key={s.id}
-              onClick={() => switchSection(s.id)}
-              style={{
-                padding: '16px 18px', background: 'none', border: 'none',
-                borderBottom: `3px solid ${section === s.id ? GREEN : 'transparent'}`,
-                color: section === s.id ? DARK : GRAY,
-                fontWeight: section === s.id ? 700 : 400,
-                fontSize: '14px', cursor: 'pointer',
-                fontFamily: 'Georgia, serif', whiteSpace: 'nowrap',
-              }}
-            >
-              {s.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
       <div style={{ maxWidth: '960px', margin: '0 auto', padding: '36px 24px' }}>
 
-        {/* FILTERS */}
-        <div style={{
-          background: 'white', borderRadius: '14px', border: `1px solid ${BORDER}`,
-          padding: '20px 24px', marginBottom: '28px',
-        }}>
-          {/* Topic filter — books, kits */}
-          {(section === 'books' || section === 'kits') && (
-            <FilterBar label="Topic" options={TOPICS} active={topic} onSelect={setTopic} />
-          )}
-
-          {/* Book-specific */}
-          {section === 'books' && (
-            <FilterBar label="Book Type" options={BOOK_TYPES} active={bookType} onSelect={setBookType} />
-          )}
-
-          {/* Game-specific */}
-          {section === 'games' && (
-            <>
-              <FilterBar label="Game Type"        options={GAME_TYPES}   active={gameType} onSelect={setGameType} />
-              <FilterBar label="Number of Players" options={GAME_PLAYERS} active={players}  onSelect={setPlayers} />
-            </>
-          )}
-
-          {/* Kit-specific */}
-          {section === 'kits' && (
-            <FilterBar label="Kit Type" options={KIT_TYPES} active={kitType} onSelect={setKitType} />
-          )}
-
-          {/* Art-specific */}
-          {section === 'art' && (
-            <FilterBar label="Medium" options={ART_MEDIUMS} active={medium} onSelect={setMedium} />
-          )}
-
-          {/* Age — all sections */}
-          <FilterBar label="Age Range" options={AGES} active={age} onSelect={setAge} />
+        {/* FILTER */}
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '32px' }}>
+          {CATEGORIES.map(c => (
+            <button
+              key={c.id}
+              onClick={() => setActive(c.id)}
+              style={{
+                padding: '10px 22px', borderRadius: '100px', cursor: 'pointer',
+                border: `2px solid ${active === c.id ? GREEN : BORDER}`,
+                background: active === c.id ? GREEN : 'white',
+                color: active === c.id ? 'white' : GRAY,
+                fontWeight: active === c.id ? 700 : 400,
+                fontSize: '14px', fontFamily: 'Georgia, serif',
+              }}
+            >
+              {c.label}
+            </button>
+          ))}
+          <span style={{ marginLeft: 'auto', fontSize: '13px', color: GRAY, alignSelf: 'center' }}>
+            {filtered.length} resources
+          </span>
         </div>
-
-        {/* COUNT */}
-        <p style={{ color: GRAY, fontSize: '13px', marginBottom: '18px' }}>
-          Showing {filtered.length} resource{filtered.length !== 1 ? 's' : ''}
-        </p>
 
         {/* GRID */}
         <div style={{
@@ -729,17 +500,6 @@ export default function ResourcesPage() {
           {filtered.map(r => <ResourceCard key={r.id} r={r} />)}
         </div>
 
-        {/* EMPTY STATE */}
-        {filtered.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '80px 24px', color: GRAY }}>
-            <p style={{ fontSize: '32px', marginBottom: '12px' }}>🐱</p>
-            <p style={{ fontSize: '18px', fontWeight: 700, color: '#1A1A1A', marginBottom: '8px' }}>
-              No resources found for this combination
-            </p>
-            <p style={{ fontSize: '14px' }}>Try removing one of the filters to see more options.</p>
-          </div>
-        )}
-
         {/* CTA */}
         <div style={{
           marginTop: '56px', padding: '32px', background: 'white',
@@ -747,21 +507,18 @@ export default function ResourcesPage() {
         }}>
           <p style={{ fontSize: '20px', marginBottom: '10px' }}>🐱</p>
           <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1A1A1A', marginBottom: '8px' }}>
-            Want more recommendations?
+            Want personalized recommendations?
           </h3>
           <p style={{ fontSize: '14px', color: GRAY, marginBottom: '20px', lineHeight: 1.6, maxWidth: '400px', margin: '0 auto 20px' }}>
             Generate a unit study and Moncho will suggest specific books and materials
             tailored to your child's theme, age, and learning philosophy.
           </p>
-          <a
-            href="/generate"
-            style={{
-              display: 'inline-block', background: GREEN, color: 'white',
-              padding: '14px 32px', borderRadius: '100px',
-              textDecoration: 'none', fontSize: '15px', fontWeight: 700,
-              fontFamily: 'Georgia, serif',
-            }}
-          >
+          <a href="/generate" style={{
+            display: 'inline-block', background: GREEN, color: 'white',
+            padding: '14px 32px', borderRadius: '100px',
+            textDecoration: 'none', fontSize: '15px', fontWeight: 700,
+            fontFamily: 'Georgia, serif',
+          }}>
             ✨ Generate a Unit Study
           </a>
         </div>
