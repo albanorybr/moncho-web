@@ -411,18 +411,18 @@ export default function Home() {
           fontWeight: 700,
           display: 'inline-block',
         }}>Generate your first study →</a>
+        {/* AI DISCLAIMER */}
+        <div style={{
+          marginTop: '32px',
+          background: 'rgba(255,255,255,0.1)',
+          border: '1px solid rgba(255,255,255,0.2)',
+          borderRadius: '12px',
+          padding: '16px 24px',
+          maxWidth: '560px',
+          margin: '32px auto 0',
+          display: 'block',
+        }}></div>
       </section>
-      {/* AI DISCLAIMER */}
-      <div style={{
-        marginTop: '32px',
-        background: 'rgba(255,255,255,0.1)',
-        border: '1px solid rgba(255,255,255,0.2)',
-        borderRadius: '12px',
-        padding: '16px 24px',
-        maxWidth: '560px',
-        margin: '32px auto 0',
-        display: 'block',
-      }}>
         <p style={{
           fontSize: '13px',
           color: 'rgba(255,255,255,0.8)',
