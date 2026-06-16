@@ -203,9 +203,8 @@ export default function GeneratorPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
            <a href="/dashboard" style={{ fontSize: '14px', color: '#5F5E5A', textDecoration: 'none' }}>
             My Studies
-          </a>
           <a href="/resources" style={{ fontSize: '14px', color: '#5F5E5A', textDecoration: 'none' }}>
-            Resources
+            📚 Resources
           </a>
           <button onClick={handleLogout} style={{
             background: 'none', border: '1px solid #E8E4DC', borderRadius: '100px',
