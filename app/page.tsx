@@ -440,7 +440,12 @@ export default function Home() {
         fontSize: '14px',
       }}>
         <div style={{ marginBottom: '8px', fontWeight: 600, color: '#1D9E75' }}>🐱 Moncho Unschooling</div>
-        <div>By Alba Nory de González · monchounschooling.com</div>
+        <div style={{ marginBottom: '16px' }}>By Alba Nory de González · monchounschooling.com</div>
+        <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', fontSize: '13px' }}>
+          <a href="/terms" style={{ color: '#5F5E5A', textDecoration: 'none' }}>Terms of Service</a>
+          <a href="/resources" style={{ color: '#5F5E5A', textDecoration: 'none' }}>Resources</a>
+          <a href="/pricing" style={{ color: '#5F5E5A', textDecoration: 'none' }}>Pricing</a>
+          </div>
       </footer>
 
     </main>
