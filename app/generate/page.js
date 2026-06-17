@@ -86,7 +86,7 @@ export default function GeneratorPage() {
     philosophy:         'moncho',
     learning_style:     'moncho',
     parent_note:        '',
-    subjects_available: SUBJECTS.map(s => s.id),
+    subjects_available: [],
   })
 
   const [status,   setStatus]   = useState('idle')
@@ -432,9 +432,12 @@ export default function GeneratorPage() {
           {/* SUBJECTS — only in Custom mode */}
           {form.mode === 'custom' && (
             <div>
-              <label style={{ display: 'block', fontWeight: 700, marginBottom: '8px', fontSize: '15px' }}>
+              <label style={{ display: 'block', fontWeight: 700, marginBottom: '4px', fontSize: '15px' }}>
                 📋 Subjects to include
               </label>
+              <p style={{ color: GRAY, fontSize: '13px', marginBottom: '12px' }}>
+                Select the subjects your child is most interested in exploring.
+              </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {SUBJECTS.map(s => {
                   const selected = form.subjects_available.includes(s.id)
@@ -552,13 +555,6 @@ export default function GeneratorPage() {
                 <p style={{ color: GRAY, fontSize: '13px' }}>🎨 Adding the Moncho magic...</p>
               </div>
             )}
-            <div style={{
-              marginTop: '20px', padding: '12px 16px', background: CREAM,
-              borderRadius: '10px', fontSize: '12px', color: GRAY, fontStyle: 'italic',
-            }}>
-              💡 Fun fact: The average unit study takes 4-6 hours to create from scratch.
-              Moncho does it in minutes — so you can spend that time actually exploring with your child! 🌍
-            </div>
           </div>
         )}
 
