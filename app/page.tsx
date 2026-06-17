@@ -30,6 +30,7 @@ export default function Home() {
           🐱 Moncho
         </div>
         <div style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
+          <a href="/resources" style={{ color: '#5F5E5A', textDecoration: 'none', fontSize: '15px' }}>📚 Resources</a>
           <a href="/pricing" style={{ color: '#5F5E5A', textDecoration: 'none', fontSize: '15px' }}>Pricing</a>
           <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
   <a href="/dashboard" style={{ 
