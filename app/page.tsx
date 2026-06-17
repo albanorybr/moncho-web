@@ -422,11 +422,12 @@ export default function Home() {
           maxWidth: '560px',
           margin: '32px auto 0',
           display: 'block',
-        }}></div>
-          <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.8)', lineHeight: '1.6', margin: '0', fontFamily: 'Georgia, serif',
+        }}>
+          <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.8)', lineHeight: '1.6', margin: '0', fontFamily: 'Georgia, serif' }}>
             🤖 <strong style={{ color: 'white' }}>Moncho is an AI-powered tool designed for parents and educators.</strong> AI can make mistakes — always review the generated unit study before sharing it with your child. You know your child best!
           </p>
         </div>
+
       </section>
       {/* FOOTER */}
       <footer style={{
