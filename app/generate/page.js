@@ -6,45 +6,45 @@ import { useState, useEffect } from 'react'
 const API_URL = 'https://moncho-api-production-2c00.up.railway.app'
 
 const AGE_RANGES = [
-  { id: '5-7',   label: '🌱 Early Childhood',  desc: '5-7 years' },
-  { id: '7-11',  label: '📚 Elementary',        desc: '7-11 years' },
-  { id: '12-15', label: '🔬 Middle School',      desc: '12-15 years' },
-  { id: '15-18', label: '🎓 High School',        desc: '15-18 years' },
+  { id: '5-7', label: '🌱 Early Childhood', desc: '5-7 years' },
+  { id: '7-11', label: '📚 Elementary', desc: '7-11 years' },
+  { id: '12-15', label: '🔬 Middle School', desc: '12-15 years' },
+  { id: '15-18', label: '🎓 High School', desc: '15-18 years' },
 ]
 
 const PHILOSOPHIES = [
-  { id: 'moncho',          emoji: '🐱', label: 'Moncho Style',    desc: 'Hands-on, curiosity-driven, project-based' },
-  { id: 'montessori',      emoji: '🌱', label: 'Montessori',      desc: 'Child-led, self-paced, prepared environment' },
+  { id: 'moncho', emoji: '🐱', label: 'Moncho Style', desc: 'Hands-on, curiosity-driven, project-based' },
+  { id: 'montessori', emoji: '🌱', label: 'Montessori', desc: 'Child-led, self-paced, prepared environment' },
   { id: 'charlotte_mason', emoji: '📖', label: 'Charlotte Mason', desc: 'Living books, narration, nature study' },
-  { id: 'waldorf',         emoji: '🌿', label: 'Waldorf',         desc: 'Artistic, imaginative, developmental stages' },
-  { id: 'forest_school',   emoji: '🌲', label: 'Forest School',   desc: 'Outdoor learning, nature connection' },
-  { id: 'unschooling',     emoji: '🌎', label: 'Unschooling',     desc: 'Child-led, interest-based, no fixed curriculum' },
+  { id: 'waldorf', emoji: '🌿', label: 'Waldorf', desc: 'Artistic, imaginative, developmental stages' },
+  { id: 'forest_school', emoji: '🌲', label: 'Forest School', desc: 'Outdoor learning, nature connection' },
+  { id: 'unschooling', emoji: '🌎', label: 'Unschooling', desc: 'Child-led, interest-based, no fixed curriculum' },
 ]
 
 const SUBJECTS = [
-  { id: 'Science',           emoji: '🔬', color: '#1D9E75' },
-  { id: 'Biology',           emoji: '🧬', color: '#2E7D32' },
-  { id: 'Chemistry',         emoji: '⚗️',  color: '#6A1B9A' },
-  { id: 'Physics',           emoji: '⚡',  color: '#1565C0' },
-  { id: 'Earth Science',     emoji: '🌍', color: '#4E342E' },
-  { id: 'Astronomy',         emoji: '🌌', color: '#1A237E' },
-  { id: 'Math',              emoji: '📊', color: '#2E86C1' },
-  { id: 'Language Arts',     emoji: '📖', color: '#7D3C98' },
-  { id: 'Geography',         emoji: '🗺️',  color: '#0277BD' },
-  { id: 'History',           emoji: '📜', color: '#F0A500' },
-  { id: 'Art & Creativity',  emoji: '🎨', color: '#E8522A' },
-  { id: 'Music',             emoji: '🎵', color: '#C2185B' },
-  { id: 'Movement & Body',   emoji: '🏃', color: '#00796B' },
+  { id: 'Science', emoji: '🔬', color: '#1D9E75' },
+  { id: 'Biology', emoji: '🧬', color: '#2E7D32' },
+  { id: 'Chemistry', emoji: '⚗️', color: '#6A1B9A' },
+  { id: 'Physics', emoji: '⚡', color: '#1565C0' },
+  { id: 'Earth Science', emoji: '🌍', color: '#4E342E' },
+  { id: 'Astronomy', emoji: '🌌', color: '#1A237E' },
+  { id: 'Math', emoji: '📊', color: '#2E86C1' },
+  { id: 'Language Arts', emoji: '📖', color: '#7D3C98' },
+  { id: 'Geography', emoji: '🗺️', color: '#0277BD' },
+  { id: 'History', emoji: '📜', color: '#F0A500' },
+  { id: 'Art & Creativity', emoji: '🎨', color: '#E8522A' },
+  { id: 'Music', emoji: '🎵', color: '#C2185B' },
+  { id: 'Movement & Body', emoji: '🏃', color: '#00796B' },
   { id: 'Critical Thinking', emoji: '💡', color: '#7D3C98' },
   { id: 'Life Skills & SEL', emoji: '🌱', color: '#388E3C' },
-  { id: 'Technology',        emoji: '💻', color: '#283593' },
+  { id: 'Technology', emoji: '💻', color: '#283593' },
 ]
 
-const GREEN  = '#1D9E75'
-const DARK   = '#085041'
-const CREAM  = '#F7F4EF'
+const GREEN = '#1D9E75'
+const DARK = '#085041'
+const CREAM = '#F7F4EF'
 const BORDER = '#E8E4DC'
-const GRAY   = '#5F5E5A'
+const GRAY = '#5F5E5A'
 
 // ── Scroll to top button ──────────────────────────────────────
 function ScrollToTopButton() {
@@ -78,54 +78,56 @@ function ScrollToTopButton() {
 
 export default function GeneratorPage() {
   const [form, setForm] = useState({
-    theme:              '',
-    age_range:          '7-11',
-    language:           'English',
-    mode:               'mini',
-    depth:              'light',
-    philosophy:         'moncho',
-    learning_style:     'moncho',
-    parent_note:        '',
+    theme: '',
+    age_range: '7-11',
+    language: 'English',
+    mode: 'mini',
+    depth: 'light',
+    philosophy: 'moncho',
+    learning_style: 'moncho',
+    parent_note: '',
     subjects_available: [],
   })
 
-  const [status,   setStatus]   = useState('idle')
+  const [status, setStatus] = useState('idle')
   const [progress, setProgress] = useState([])
-  const [result,   setResult]   = useState(null)
-  const [error,    setError]    = useState('')
+  const [result, setResult] = useState(null)
+  const [error, setError] = useState('')
 
-  useEffect(() => {
-    async function checkAuth() {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        window.location.href = '/login'
-        return
-      }
+  // Moved out of useEffect so we can re-check after each generation
+  async function checkAuth() {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+      window.location.href = '/login'
+      return
+    }
 
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('plan')
-        .eq('id', session.user.id)
-        .single()
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('plan')
+      .eq('id', session.user.id)
+      .single()
 
-      const isPro = profile?.plan === 'pro'
+    const isPro = profile?.plan === 'pro'
 
-      if (!isPro) {
-        const startOfMonth = new Date()
-        startOfMonth.setDate(1)
-        startOfMonth.setHours(0, 0, 0, 0)
+    if (!isPro) {
+      const startOfMonth = new Date()
+      startOfMonth.setDate(1)
+      startOfMonth.setHours(0, 0, 0, 0)
 
-        const { count } = await supabase
-          .from('studies')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', session.user.id)
-          .gte('created_at', startOfMonth.toISOString())
+      const { count } = await supabase
+        .from('studies')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', session.user.id)
+        .gte('created_at', startOfMonth.toISOString())
 
-        if (count >= 2) {
-          setError('🌟 You have used your 2 free studies this month. Upgrade to Pro for unlimited studies!')
-        }
+      if (count >= 2) {
+        setError('🌟 You have used your 2 free studies this month. Upgrade to Pro for unlimited studies!')
       }
     }
+  }
+
+  useEffect(() => {
     checkAuth()
   }, [])
 
@@ -159,11 +161,34 @@ export default function GeneratorPage() {
     }
 
     try {
+      // The API now requires a logged-in user
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        window.location.href = '/login'
+        return
+      }
+
       const res = await fetch(`${API_URL}/generate`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
         body: JSON.stringify(payload),
       })
+
+      // Server may refuse: 401 = not logged in, 403 = free limit reached
+      if (res.status === 401) {
+        window.location.href = '/login'
+        return
+      }
+      if (res.status === 403) {
+        const d = await res.json()
+        setError(d.message || '🌟 You have used your 2 free studies this month. Upgrade to Pro for unlimited studies!')
+        setStatus('idle')
+        return
+      }
+
       const data = await res.json()
       const jobId = data.job_id
 
@@ -177,7 +202,7 @@ export default function GeneratorPage() {
 
       const poll = setInterval(async () => {
         try {
-          const statusRes  = await fetch(`${API_URL}/status/${jobId}`)
+          const statusRes = await fetch(`${API_URL}/status/${jobId}`)
           const statusData = await statusRes.json()
 
           if (statusData.progress) setProgress(statusData.progress)
@@ -186,18 +211,10 @@ export default function GeneratorPage() {
             clearInterval(poll)
             setResult(statusData.result)
             setStatus('done')
-
-            const { data: { session } } = await supabase.auth.getSession()
-            if (session) {
-              await supabase.from('studies').insert({
-                user_id:        session.user.id,
-                theme:          form.theme,
-                language:       form.language,
-                subjects:       statusData.result.subjects_included,
-                creative_angle: statusData.result.creative_angle,
-                output:         statusData.result.output,
-              })
-            }
+            // The study is saved by the SERVER now (no browser insert).
+            // Re-check the limit so the button disables honestly if this
+            // was the 2nd free study.
+            checkAuth()
           } else if (statusData.status === 'error') {
             clearInterval(poll)
             setError(statusData.error || 'Something went wrong.')
@@ -219,38 +236,23 @@ export default function GeneratorPage() {
     window.location.href = '/login'
   }
 
-  function downloadPDF() {
-    const printWindow = window.open('', '_blank')
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>Moncho - ${form.theme} Unit Study</title>
-          <style>
-            * { box-sizing: border-box; margin: 0; padding: 0; }
-            body { font-family: Georgia, serif; max-width: 750px; margin: 40px auto; padding: 20px; background: #F7F4EF; color: #1A1A1A; line-height: 1.8; }
-            .header { background: #085041; color: white; padding: 32px; border-radius: 16px; margin-bottom: 32px; text-align: center; }
-            .header h1 { font-size: 32px; margin-bottom: 8px; }
-            .header .angle { font-style: italic; color: rgba(255,255,255,0.85); font-size: 15px; margin-top: 10px; }
-            .header .meta { color: rgba(255,255,255,0.6); font-size: 13px; margin-top: 6px; }
-            pre { white-space: pre-wrap; font-family: Georgia, serif; font-size: 14px; line-height: 2; background: white; padding: 28px; border-radius: 12px; }
-            .footer { text-align: center; color: #5F5E5A; font-size: 12px; margin-top: 32px; padding-top: 16px; border-top: 1px solid #E8E4DC; }
-            @media print { body { background: white; } }
-          </style>
-        </head>
-        <body>
-          <div class="header">
-            <div class="meta">🐱 Moncho Unschooling · ${form.language}</div>
-            <h1>${form.theme} Unit Study</h1>
-            <div class="angle">"${result.creative_angle}"</div>
-            <div class="meta" style="margin-top:12px">Subjects: ${result.subjects_included?.join(' · ')}</div>
-          </div>
-          <pre>${result.output.replace(/---/g, '</pre><hr style="border:none;border-top:3px solid #1D9E75;margin:28px 0;opacity:0.4"><pre>')}</pre>
-          <div class="footer">Moncho Unschooling · monchounschooling.com · AI-generated content — reviewed by a parent before use</div>
-        </body>
-      </html>
-    `)
-    printWindow.document.close()
-    printWindow.print()
+  async function downloadPDF() {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) { window.location.href = '/login'; return }
+    if (!result?.study_id) {
+      alert('PDF not ready — check your dashboard in a few seconds.')
+      return
+    }
+    const res = await fetch(`${API_URL}/pdf/${result.study_id}`, {
+      headers: { 'Authorization': `Bearer ${session.access_token}` },
+    })
+    if (!res.ok) {
+      alert('Could not create the PDF. Please try again in a moment.')
+      return
+    }
+    const blob = await res.blob()
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank')
   }
 
   const isGenerating = status === 'loading' || status === 'polling'
@@ -412,8 +414,8 @@ export default function GeneratorPage() {
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
               {[
-                { id: 'mini',   label: '⚡ Mini',  desc: 'AI picks 3 best subjects' },
-                { id: 'full',   label: '📦 Full',  desc: 'AI picks up to 10 subjects' },
+                { id: 'mini', label: '⚡ Mini', desc: 'AI picks 3 best subjects' },
+                { id: 'full', label: '📦 Full', desc: 'AI picks up to 10 subjects' },
                 { id: 'custom', label: '🎛️ Custom', desc: 'You choose the subjects' },
               ].map(m => (
                 <button key={m.id} onClick={() => setForm(f => ({ ...f, mode: m.id }))} style={{
@@ -463,9 +465,9 @@ export default function GeneratorPage() {
                 </label>
                 <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                   {[
-                    { id: 'light',  label: 'Light',  desc: '2-3 subtopics' },
+                    { id: 'light', label: 'Light', desc: '2-3 subtopics' },
                     { id: 'medium', label: 'Medium', desc: '5-6 subtopics' },
-                    { id: 'deep',   label: 'Deep',   desc: 'Up to 10 subtopics' },
+                    { id: 'deep', label: 'Deep', desc: 'Up to 10 subtopics' },
                   ].map(d => (
                     <button key={d.id} onClick={() => setForm(f => ({ ...f, depth: d.id }))} style={{
                       padding: '10px 20px', borderRadius: '100px', cursor: 'pointer',
@@ -515,8 +517,8 @@ export default function GeneratorPage() {
             }}
           >
             {status === 'loading' ? '🚀 Starting generation...' :
-             status === 'polling' ? '⏳ Generating your unit study...' :
-             '✨ Generate Unit Study'}
+              status === 'polling' ? '⏳ Generating your unit study...' :
+                '✨ Generate Unit Study'}
           </button>
 
           {/* AI DISCLAIMER — below generate button */}
@@ -585,7 +587,7 @@ export default function GeneratorPage() {
               {result.output}
             </div>
 
-            {/* PDF DOWNLOAD BUTTON — styled prominently */}
+            {/* PDF BUTTON — opens the designed PDF in a new tab */}
             <div style={{ marginTop: '20px' }}>
               <button
                 onClick={downloadPDF}
@@ -601,10 +603,10 @@ export default function GeneratorPage() {
                 onMouseEnter={e => e.currentTarget.style.background = '#063d31'}
                 onMouseLeave={e => e.currentTarget.style.background = DARK}
               >
-                📥 Download Unit Study PDF
+                📄 View Unit Study PDF
               </button>
               <p style={{ fontSize: '12px', color: GRAY, textAlign: 'center', marginTop: '8px' }}>
-                Opens print dialog — save as PDF or print directly
+                Opens in a new tab — ready to save or print
               </p>
             </div>
           </div>
