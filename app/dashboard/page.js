@@ -3,11 +3,13 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 
-const GREEN  = '#1D9E75'
-const DARK   = '#085041'
-const CREAM  = '#F7F4EF'
+const API_URL = 'https://moncho-api-production-2c00.up.railway.app'
+
+const GREEN = '#1D9E75'
+const DARK = '#085041'
+const CREAM = '#F7F4EF'
 const BORDER = '#E8E4DC'
-const GRAY   = '#5F5E5A'
+const GRAY = '#5F5E5A'
 
 function ScrollToTopButton() {
   const [visible, setVisible] = useState(false)
@@ -41,7 +43,7 @@ function ScrollToTopButton() {
 export default function DashboardPage() {
   const [studies, setStudies] = useState([])
   const [loading, setLoading] = useState(true)
-  const [user,    setUser]    = useState(null)
+  const [user, setUser] = useState(null)
 
   useEffect(() => {
     async function loadData() {
@@ -74,38 +76,21 @@ export default function DashboardPage() {
     })
   }
 
-  function downloadPDF(study) {
-    const printWindow = window.open('', '_blank')
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>Moncho - ${study.theme} Unit Study</title>
-          <style>
-            * { box-sizing: border-box; margin: 0; padding: 0; }
-            body { font-family: Georgia, serif; max-width: 750px; margin: 40px auto; padding: 20px; background: #F7F4EF; color: #1A1A1A; line-height: 1.8; }
-            .header { background: #085041; color: white; padding: 32px; border-radius: 16px; margin-bottom: 32px; text-align: center; }
-            .header h1 { font-size: 32px; margin-bottom: 8px; }
-            .header .angle { font-style: italic; color: rgba(255,255,255,0.85); font-size: 15px; margin-top: 10px; }
-            .header .meta { color: rgba(255,255,255,0.6); font-size: 13px; margin-top: 6px; }
-            pre { white-space: pre-wrap; font-family: Georgia, serif; font-size: 14px; line-height: 2; background: white; padding: 28px; border-radius: 12px; }
-            .footer { text-align: center; color: #5F5E5A; font-size: 12px; margin-top: 32px; padding-top: 16px; border-top: 1px solid #E8E4DC; }
-            @media print { body { background: white; } }
-          </style>
-        </head>
-        <body>
-          <div class="header">
-            <div class="meta">🐱 Moncho Unschooling · ${study.language || 'English'}</div>
-            <h1>${study.theme} Unit Study</h1>
-            ${study.creative_angle ? `<div class="angle">"${study.creative_angle}"</div>` : ''}
-            ${study.subjects ? `<div class="meta" style="margin-top:12px">Subjects: ${study.subjects.join(' · ')}</div>` : ''}
-          </div>
-          <pre>${(study.output || '').replace(/---/g, '</pre><hr style="border:none;border-top:3px solid #1D9E75;margin:28px 0;opacity:0.4"><pre>')}</pre>
-          <div class="footer">Moncho Unschooling · monchounschooling.com · AI-generated content — reviewed by a parent before use</div>
-        </body>
-      </html>
-    `)
-    printWindow.document.close()
-    printWindow.print()
+  // Opens the designed PDF (built by the API with WeasyPrint) in a new tab
+  async function downloadPDF(study) {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) { window.location.href = '/login'; return }
+
+    const res = await fetch(`${API_URL}/pdf/${study.id}`, {
+      headers: { 'Authorization': `Bearer ${session.access_token}` },
+    })
+    if (!res.ok) {
+      alert('Could not create the PDF. Please try again in a moment.')
+      return
+    }
+    const blob = await res.blob()
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank')
   }
 
   return (
@@ -216,7 +201,7 @@ export default function DashboardPage() {
                   <p style={{ color: GRAY, fontSize: '12px' }}>{formatDate(study.created_at)}</p>
                 </div>
 
-                {/* PDF DOWNLOAD BUTTON — styled as a real button */}
+                {/* PDF BUTTON — opens the designed PDF in a new tab */}
                 <button
                   onClick={() => downloadPDF(study)}
                   style={{
@@ -231,7 +216,7 @@ export default function DashboardPage() {
                   onMouseEnter={e => e.currentTarget.style.background = '#063d31'}
                   onMouseLeave={e => e.currentTarget.style.background = DARK}
                 >
-                  📥 Download PDF
+                  📄 View PDF
                 </button>
               </div>
             ))}
