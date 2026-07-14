@@ -537,25 +537,34 @@ export default function GeneratorPage() {
             marginTop: '32px', background: 'white', borderRadius: '16px',
             padding: '28px', border: `2px solid ${GREEN}`,
           }}>
-            <p style={{ fontWeight: 700, marginBottom: '8px', color: DARK, fontSize: '18px' }}>
+            {/* Running Moncho cat (public/moncho-cat.gif). If the GIF
+                isn't uploaded yet, it hides itself gracefully. */}
+            <img
+              src="/moncho-cat.gif"
+              alt="Moncho is running!"
+              onError={e => { e.currentTarget.style.display = 'none' }}
+              style={{ width: '140px', display: 'block', margin: '0 auto 12px auto' }}
+            />
+            <p style={{ fontWeight: 700, marginBottom: '8px', color: DARK, fontSize: '18px', textAlign: 'center' }}>
               🐱 Moncho is on it!
             </p>
-            <p style={{ color: GREEN, fontSize: '15px', marginBottom: '16px', fontStyle: 'italic' }}>
-              This takes 3-5 minutes. Yes, minutes. But think about it —
-              a curriculum specialist would take 3-5 <em>hours</em>. ☕
+            <p style={{ color: GREEN, fontSize: '15px', marginBottom: '16px', fontStyle: 'italic', textAlign: 'center' }}>
+              A few minutes of cat-speed work — a curriculum specialist
+              would take <em>hours</em>. ☕
             </p>
-            <p style={{ color: GRAY, fontSize: '13px', marginBottom: '20px' }}>
+            <p style={{ color: GRAY, fontSize: '13px', marginBottom: '20px', textAlign: 'center' }}>
               Please don't close this window! Moncho is working hard behind the scenes. 🐾
             </p>
             {progress.length > 0 ? progress.map((p, i) => (
-              <p key={i} style={{ color: GREEN, fontSize: '14px', marginBottom: '4px' }}>✅ {p}</p>
+              <p key={i} style={{
+                color: i === progress.length - 1 ? DARK : GREEN,
+                fontWeight: i === progress.length - 1 ? 700 : 400,
+                fontSize: '14px', marginBottom: '4px',
+              }}>
+                {i === progress.length - 1 ? '➡️ ' : '✅ '}{p}
+              </p>
             )) : (
-              <div>
-                <p style={{ color: GRAY, fontSize: '13px', marginBottom: '6px' }}>⏳ Waking up the agents...</p>
-                <p style={{ color: GRAY, fontSize: '13px', marginBottom: '6px' }}>🧠 Planning your subjects...</p>
-                <p style={{ color: GRAY, fontSize: '13px', marginBottom: '6px' }}>✍️ Writing hands-on challenges...</p>
-                <p style={{ color: GRAY, fontSize: '13px' }}>🎨 Adding the Moncho magic...</p>
-              </div>
+              <p style={{ color: GRAY, fontSize: '13px' }}>⏳ Waking up the agents...</p>
             )}
           </div>
         )}
