@@ -71,7 +71,7 @@ export default function Home() {
           marginBottom: '32px',
           letterSpacing: '0.5px',
         }}>
-          ✨ Unit studies in under 2 minutes
+          ✨ Unit studies in under 15 minutes
         </div>
 
         <h1 style={{
