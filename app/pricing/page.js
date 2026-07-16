@@ -15,6 +15,7 @@ export default function PricingPage() {
   const [billing, setBilling] = useState('monthly')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [needLogin, setNeedLogin] = useState(false)
   const paypalRef = useRef(null)
 
   const isGTQ = currency === 'GTQ'
@@ -61,7 +62,9 @@ export default function PricingPage() {
     let cancelled = false
     async function renderPayPal() {
       const { data: { session } } = await supabase.auth.getSession()
-      if (!session || cancelled) return
+      if (cancelled) return
+      if (!session) { setNeedLogin(true); return }
+      setNeedLogin(false)
       const userId = session.user.id
 
       function draw() {
@@ -308,12 +311,29 @@ export default function PricingPage() {
             {!isGTQ && (
               <div>
                 <div style={{
-                  textAlign: 'center', color: 'rgba(255,255,255,0.7)',
-                  fontSize: '12px', margin: '8px 0',
+                  display: 'flex', alignItems: 'center', gap: '12px',
+                  margin: '16px 0',
                 }}>
-                  — or —
+                  <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.35)' }} />
+                  <span style={{
+                    color: 'white', fontSize: '15px', fontWeight: 700,
+                  }}>
+                    or pay with PayPal
+                  </span>
+                  <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.35)' }} />
                 </div>
-                <div ref={paypalRef} />
+                {needLogin ? (
+                  <a href="/login" style={{
+                    display: 'block', textAlign: 'center',
+                    padding: '14px', borderRadius: '100px',
+                    background: '#FFC439', color: '#003087',
+                    textDecoration: 'none', fontWeight: 700, fontSize: '15px',
+                  }}>
+                    🅿️ PayPal — log in to subscribe
+                  </a>
+                ) : (
+                  <div ref={paypalRef} />
+                )}
               </div>
             )}
 
