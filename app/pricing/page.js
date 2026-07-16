@@ -1,29 +1,94 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { supabase } from '../lib/supabase'
 
-const QPAYPRO = {
-  GTQ_MONTHLY: 'https://payments.qpaypro.com/checkout/suscripcion/4825/uITsLTLZTD',
-  GTQ_YEARLY:  'https://payments.qpaypro.com/checkout/suscripcion/4825/ODS4m1Olmn',
-  USD_MONTHLY: 'https://payments.qpaypro.com/checkout/suscripcion/4825/1cmxAfMmtX',
-  USD_YEARLY:  'https://payments.qpaypro.com/checkout/suscripcion/4825/xqq1WaATk9',
-}
+const API_URL = 'https://moncho-api-production-2c00.up.railway.app'
+
+// PayPal (USD only) — the client id is public by design
+const PAYPAL_CLIENT_ID = 'AcZ6YN0OxH1P_Z1cNk5r1VYiqTwFc7OZpt8yoNc1Jh9tw-SxbWPzl657OF4CsvyujrjE71f6eT3vKmFr'
+const PAYPAL_PLAN_MONTHLY = 'P-144282947W404122GNJMFA7Y' // $9/mo
+const PAYPAL_PLAN_YEARLY = 'P-7FV029950U1023700NJMFA7Y'  // $76/yr
 
 export default function PricingPage() {
   const [currency, setCurrency] = useState('GTQ')
   const [billing, setBilling] = useState('monthly')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const paypalRef = useRef(null)
 
   const isGTQ = currency === 'GTQ'
   const isYearly = billing === 'yearly'
 
-  const checkoutUrl = isGTQ
-    ? (isYearly ? QPAYPRO.GTQ_YEARLY : QPAYPRO.GTQ_MONTHLY)
-    : (isYearly ? QPAYPRO.USD_YEARLY : QPAYPRO.USD_MONTHLY)
-
   const monthlyPrice = isGTQ ? 'Q69' : '$9'
-  const yearlyPrice  = isGTQ ? 'Q602' : '$76'
+  const yearlyPrice = isGTQ ? 'Q602' : '$76'
   const yearlyMonthly = isGTQ ? 'Q50' : '$6.33'
   const savings = isGTQ ? 'Q226' : '$32'
+
+  // ── Card checkout via Recurrente (GTQ + USD) ────────────────
+  async function cardCheckout() {
+    setError('')
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) { window.location.href = '/login'; return }
+    setBusy(true)
+    try {
+      const plan = `${isYearly ? 'yearly' : 'monthly'}_${isGTQ ? 'gtq' : 'usd'}`
+      const res = await fetch(`${API_URL}/billing/checkout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ plan }),
+      })
+      const data = await res.json()
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url
+      } else {
+        setError(data.error || 'Could not start checkout. Please try again.')
+        setBusy(false)
+      }
+    } catch (e) {
+      setError('Could not connect. Please try again.')
+      setBusy(false)
+    }
+  }
+
+  // ── PayPal buttons (USD only) ───────────────────────────────
+  useEffect(() => {
+    if (isGTQ) return
+
+    let cancelled = false
+    async function renderPayPal() {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session || cancelled) return
+      const userId = session.user.id
+
+      function draw() {
+        if (cancelled || !window.paypal || !paypalRef.current) return
+        paypalRef.current.innerHTML = ''
+        window.paypal.Buttons({
+          style: { shape: 'pill', label: 'subscribe', height: 45 },
+          createSubscription: (data, actions) => actions.subscription.create({
+            plan_id: isYearly ? PAYPAL_PLAN_YEARLY : PAYPAL_PLAN_MONTHLY,
+            custom_id: userId, // ← how the webhook knows WHO to upgrade
+          }),
+          onApprove: () => {
+            window.location.href = '/dashboard?upgraded=1'
+          },
+          onError: () => setError('PayPal error — please try again or use a card.'),
+        }).render(paypalRef.current)
+      }
+
+      if (window.paypal) { draw(); return }
+      const s = document.createElement('script')
+      s.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&vault=true&intent=subscription`
+      s.onload = draw
+      document.body.appendChild(s)
+    }
+    renderPayPal()
+    return () => { cancelled = true }
+  }, [currency, billing, isGTQ, isYearly])
 
   return (
     <main style={{
@@ -81,7 +146,6 @@ export default function PricingPage() {
           display: 'flex', justifyContent: 'center',
           gap: '16px', marginBottom: '40px', flexWrap: 'wrap',
         }}>
-          {/* Currency toggle */}
           <div style={{
             background: 'white', borderRadius: '100px',
             padding: '4px', border: '1px solid #E8E4DC',
@@ -105,7 +169,6 @@ export default function PricingPage() {
             ))}
           </div>
 
-          {/* Billing toggle */}
           <div style={{
             background: 'white', borderRadius: '100px',
             padding: '4px', border: '1px solid #E8E4DC',
@@ -113,7 +176,7 @@ export default function PricingPage() {
           }}>
             {[
               { key: 'monthly', label: 'Monthly' },
-              { key: 'yearly',  label: `Yearly — save ${savings}` },
+              { key: 'yearly', label: `Yearly — save ${savings}` },
             ].map(b => (
               <button
                 key={b.key}
@@ -211,10 +274,10 @@ export default function PricingPage() {
             <div style={{ marginBottom: '32px', marginTop: isYearly ? '0' : '32px' }}>
               {[
                 'Unlimited unit studies',
-                'All modes (Mini, Full, STEM)',
-                'All 12 subjects',
+                'All modes (Mini, Full, Custom)',
+                'All subjects',
                 'English & Spanish',
-                'PDF download',
+                'PDF download + email delivery',
                 'Study history',
               ].map(f => (
                 <div key={f} style={{
@@ -225,19 +288,50 @@ export default function PricingPage() {
                 </div>
               ))}
             </div>
-            <a
-              href={checkoutUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+
+            {/* Card checkout (Recurrente) — GTQ and USD */}
+            <button
+              onClick={cardCheckout}
+              disabled={busy}
               style={{
-                display: 'block', textAlign: 'center',
+                display: 'block', width: '100%', textAlign: 'center',
                 padding: '14px', borderRadius: '100px',
-                background: 'white', color: '#1D9E75',
-                textDecoration: 'none', fontWeight: 700, fontSize: '15px',
+                background: 'white', color: '#1D9E75', border: 'none',
+                fontWeight: 700, fontSize: '15px', cursor: busy ? 'wait' : 'pointer',
+                fontFamily: 'Georgia, serif', marginBottom: '12px',
               }}
             >
-              Upgrade to Pro →
-            </a>
+              {busy ? 'Opening secure checkout…' : '💳 Upgrade with card →'}
+            </button>
+
+            {/* PayPal (USD only) */}
+            {!isGTQ && (
+              <div>
+                <div style={{
+                  textAlign: 'center', color: 'rgba(255,255,255,0.7)',
+                  fontSize: '12px', margin: '8px 0',
+                }}>
+                  — or —
+                </div>
+                <div ref={paypalRef} />
+              </div>
+            )}
+
+            {error && (
+              <p style={{
+                color: 'white', background: 'rgba(0,0,0,0.2)',
+                padding: '10px 14px', borderRadius: '10px',
+                fontSize: '13px', marginTop: '12px',
+              }}>
+                {error}
+              </p>
+            )}
+            <p style={{
+              color: 'rgba(255,255,255,0.6)', fontSize: '11px',
+              textAlign: 'center', marginTop: '14px',
+            }}>
+              Cancel anytime. Secure payments by Recurrente{isGTQ ? '' : ' & PayPal'}.
+            </p>
           </div>
         </div>
 
@@ -260,12 +354,16 @@ export default function PricingPage() {
               a: 'Yes! You can cancel your Pro subscription at any time. You\'ll keep access until the end of your billing period.',
             },
             {
+              q: 'How can I pay?',
+              a: 'With any credit or debit card (in Quetzales or Dollars, processed securely by Recurrente), or with PayPal for Dollar subscriptions.',
+            },
+            {
               q: 'What languages are supported?',
               a: 'Moncho generates unit studies in English and Spanish. More languages coming soon!',
             },
             {
               q: 'How long does generation take?',
-              a: 'Usually 1-2 minutes for a Mini study (3 subjects) and 3-4 minutes for a Full study. You\'ll see progress updates while it generates.',
+              a: 'Usually 1-2 minutes for a Mini study (3 subjects) and around 3 minutes for a Full study. You\'ll see live progress while it generates — with our running cat. 🐱',
             },
           ].map(item => (
             <div key={item.q} style={{
