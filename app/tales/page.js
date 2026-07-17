@@ -14,7 +14,7 @@ const GRAY = '#5F5E5A'
 const AGE_RANGES = [
   { id: '5-7', label: '🌱 5-7 years' },
   { id: '7-11', label: '📚 7-11 years' },
-  { id: '12-15', label: '🔬 12-15 years' },
+  { id: '12-18', label: '🎓 12-18 years' },
 ]
 
 export default function TalesPage() {
@@ -188,7 +188,7 @@ export default function TalesPage() {
           </label>
           <input
             type="text"
-            placeholder="e.g. A brave little volcano, Butterflies, The ocean at night..."
+            placeholder="e.g. Life of a rural family in Huehuetenango, A market day in Chichicastenango, A shepherd boy on the volcano's slopes..."
             value={theme}
             onChange={e => setTheme(e.target.value)}
             disabled={isPro === false}
