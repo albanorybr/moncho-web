@@ -173,11 +173,11 @@ export default function Home() {
             borderLeft: '4px solid #1D9E75',
             paddingLeft: '20px',
           }}>
-            &quot;You&apos;re not just learning about volcanoes — you&apos;re becoming the scientist who discovers what makes Earth&apos;s most powerful mountains explode.&quot;
+            &quot;Build erupting models, explore the chemistry of lava lamps and baking soda reactions, and map real volcanic hotspots to understand the explosive forces that shape our planet from deep within.&quot;
           </p>
 
-          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-            {['🔬 Science', '🌍 Geography', '🎨 Art'].map(subject => (
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '32px' }}>
+            {['🌋 Earth Science', '🧪 Chemistry', '🌍 Geography'].map(subject => (
               <div key={subject} style={{
                 background: '#F7F4EF',
                 borderRadius: '100px',
@@ -188,6 +188,19 @@ export default function Home() {
               }}>{subject}</div>
             ))}
           </div>
+
+          <a href="/sample-study.pdf" target="_blank" style={{
+            display: 'inline-block',
+            background: '#085041',
+            color: 'white',
+            padding: '14px 32px',
+            borderRadius: '100px',
+            textDecoration: 'none',
+            fontSize: '16px',
+            fontWeight: 700,
+          }}>
+            📄 Download this sample study →
+          </a>
         </div>
       </section>
 
