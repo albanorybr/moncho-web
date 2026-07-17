@@ -33,23 +33,23 @@ export default function Home() {
           <a href="/resources" style={{ color: '#5F5E5A', textDecoration: 'none', fontSize: '15px' }}>📚 Resources</a>
           <a href="/pricing" style={{ color: '#5F5E5A', textDecoration: 'none', fontSize: '15px' }}>Pricing</a>
           <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-  <a href="/dashboard" style={{ 
-    color: '#5F5E5A', 
-    textDecoration: 'none', 
-    fontSize: '15px' 
-  }}>
-    My Studies
-  </a>
-  <a href="/login" style={{
-    background: '#1D9E75',
-    color: 'white',
-    padding: '10px 24px',
-    borderRadius: '100px',
-    textDecoration: 'none',
-    fontSize: '15px',
-    fontWeight: 600,
-  }}>Get Started</a>
-</div>
+            <a href="/dashboard" style={{
+              color: '#5F5E5A',
+              textDecoration: 'none',
+              fontSize: '15px'
+            }}>
+              My Studies
+            </a>
+            <a href="/login" style={{
+              background: '#1D9E75',
+              color: 'white',
+              padding: '10px 24px',
+              borderRadius: '100px',
+              textDecoration: 'none',
+              fontSize: '15px',
+              fontWeight: 600,
+            }}>Get Started</a>
+          </div>
         </div>
       </nav>
 
@@ -94,7 +94,7 @@ export default function Home() {
           margin: '0 auto 48px',
           fontFamily: 'Georgia, serif',
         }}>
-          Moncho generates complete, print-ready unit studies tailored to your child's age, interests, and learning style. In English or Spanish. In minutes.
+          Moncho generates complete, print-ready unit studies tailored to your child&apos;s age, interests, and learning style. In English or Spanish. In minutes.
         </p>
 
         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -173,7 +173,7 @@ export default function Home() {
             borderLeft: '4px solid #1D9E75',
             paddingLeft: '20px',
           }}>
-            "You're not just learning about volcanoes — you're becoming the scientist who discovers what makes Earth's most powerful mountains explode."
+            &quot;You&apos;re not just learning about volcanoes — you&apos;re becoming the scientist who discovers what makes Earth&apos;s most powerful mountains explode.&quot;
           </p>
 
           <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
@@ -187,6 +187,93 @@ export default function Home() {
                 color: '#1A1A1A',
               }}>{subject}</div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* LIVING BOOK TALES */}
+      <section style={{ background: '#085041', padding: '100px 48px' }}>
+        <div style={{
+          maxWidth: '1000px',
+          margin: '0 auto',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '64px',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+        }}>
+          <div style={{ flex: '1 1 380px', minWidth: '320px' }}>
+            <div style={{
+              display: 'inline-block',
+              background: 'rgba(255,255,255,0.12)',
+              color: '#FDF3E0',
+              padding: '6px 18px',
+              borderRadius: '100px',
+              fontSize: '14px',
+              fontWeight: 600,
+              marginBottom: '24px',
+              letterSpacing: '0.5px',
+            }}>
+              ✨ New for Pro members
+            </div>
+            <h2 style={{
+              fontSize: '42px',
+              fontWeight: 700,
+              color: 'white',
+              letterSpacing: '-1px',
+              marginBottom: '20px',
+              lineHeight: 1.15,
+            }}>
+              📖 Living Book Tales
+            </h2>
+            <p style={{
+              color: 'rgba(255,255,255,0.85)',
+              fontSize: '18px',
+              lineHeight: 1.7,
+              marginBottom: '20px',
+            }}>
+              Beautifully illustrated storybooks in the Charlotte Mason spirit — real places, real life, told as a warm story your child can narrate back. Watercolor illustrations, a consistent main character, and a print-ready picture book delivered to your email.
+            </p>
+            <p style={{
+              color: 'rgba(255,255,255,0.7)',
+              fontSize: '15px',
+              fontStyle: 'italic',
+              marginBottom: '32px',
+            }}>
+              Pro members create up to 10 tales a month. In English or Spanish.
+            </p>
+            <a href="/tales" style={{
+              background: 'white',
+              color: '#085041',
+              padding: '16px 36px',
+              borderRadius: '100px',
+              textDecoration: 'none',
+              fontSize: '17px',
+              fontWeight: 700,
+              display: 'inline-block',
+            }}>
+              Create a tale →
+            </a>
+          </div>
+          <div style={{ flex: '0 1 380px', textAlign: 'center' }}>
+            <img
+              src="/tale-sample.jpg"
+              alt="Illustration from a Moncho living tale — the church steps of Santo Tomás, Chichicastenango"
+              style={{
+                width: '100%',
+                maxWidth: '380px',
+                borderRadius: '20px',
+                boxShadow: '0 12px 48px rgba(0,0,0,0.35)',
+              }}
+            />
+            <p style={{
+              color: 'rgba(255,255,255,0.6)',
+              fontSize: '13px',
+              fontStyle: 'italic',
+              marginTop: '14px',
+            }}>
+              From &quot;El Tejido de Marta&quot; — a Moncho living tale
+            </p>
           </div>
         </div>
       </section>
@@ -304,7 +391,7 @@ export default function Home() {
             marginBottom: '16px',
           }}>Simple pricing</h2>
           <p style={{ color: '#5F5E5A', fontSize: '18px', marginBottom: '64px' }}>
-            Start free. Upgrade when you're ready.
+            Start free. Upgrade when you&apos;re ready.
           </p>
           <div style={{
             display: 'grid',
@@ -362,7 +449,7 @@ export default function Home() {
               <div style={{ fontSize: '18px', fontWeight: 700, color: 'white', marginBottom: '8px' }}>Pro</div>
               <div style={{ fontSize: '48px', fontWeight: 700, color: 'white', marginBottom: '4px' }}>$9</div>
               <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '15px', marginBottom: '32px' }}>per month</div>
-              {['Unlimited unit studies', 'All modes & styles', 'All 12 subjects', 'English & Spanish', 'PDF download', 'Study history'].map(f => (
+              {['Unlimited unit studies', '📖 10 Living Book Tales/month', 'All modes & styles', 'All 12 subjects', 'English & Spanish', 'PDF download', 'Study history'].map(f => (
                 <div key={f} style={{ display: 'flex', gap: '10px', marginBottom: '12px', fontSize: '16px', color: 'white' }}>
                   <span style={{ color: 'rgba(255,255,255,0.8)' }}>✓</span> {f}
                 </div>
@@ -445,7 +532,7 @@ export default function Home() {
           <a href="/terms" style={{ color: '#5F5E5A', textDecoration: 'none' }}>Terms of Service</a>
           <a href="/resources" style={{ color: '#5F5E5A', textDecoration: 'none' }}>Resources</a>
           <a href="/pricing" style={{ color: '#5F5E5A', textDecoration: 'none' }}>Pricing</a>
-          </div>
+        </div>
       </footer>
 
     </main>
