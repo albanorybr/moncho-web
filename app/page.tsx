@@ -545,6 +545,10 @@ export default function Home() {
           <a href="/terms" style={{ color: '#5F5E5A', textDecoration: 'none' }}>Terms of Service</a>
           <a href="/resources" style={{ color: '#5F5E5A', textDecoration: 'none' }}>Resources</a>
           <a href="/pricing" style={{ color: '#5F5E5A', textDecoration: 'none' }}>Pricing</a>
+          <a href="https://www.instagram.com/monchounschooling/" target="_blank" rel="noopener"
+             style={{ color: '#1D9E75', textDecoration: 'none', fontWeight: 600 }}>
+            📷 Instagram
+          </a>
         </div>
       </footer>
 
