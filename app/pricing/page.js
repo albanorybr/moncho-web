@@ -277,6 +277,7 @@ export default function PricingPage() {
             <div style={{ marginBottom: '32px', marginTop: isYearly ? '0' : '32px' }}>
               {[
                 'Unlimited unit studies',
+                '📖 10 illustrated Living Book Tales / month',
                 'All modes (Mini, Full, Custom)',
                 'All subjects',
                 'English & Spanish',
@@ -368,6 +369,10 @@ export default function PricingPage() {
             {
               q: 'What is a unit study?',
               a: 'A unit study is a hands-on learning guide that explores one theme across multiple subjects — science, math, art, and more. Perfect for homeschooling and unschooling families.',
+            },
+            {
+              q: 'What are Living Book Tales?',
+              a: 'Illustrated storybooks in the Charlotte Mason "living books" spirit — real places, real life, told as a warm story with beautiful watercolor illustrations. Pro members can create up to 10 tales per month, in English or Spanish.',
             },
             {
               q: 'Can I cancel anytime?',
