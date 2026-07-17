@@ -42,6 +42,7 @@ function ScrollToTopButton() {
 
 export default function DashboardPage() {
   const [studies, setStudies] = useState([])
+  const [tales, setTales] = useState([])
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState(null)
 
@@ -60,6 +61,18 @@ export default function DashboardPage() {
         .order('created_at', { ascending: false })
 
       if (!error) setStudies(data || [])
+
+      // Tales live behind the API (service-key access)
+      try {
+        const res = await fetch(`${API_URL}/tales`, {
+          headers: { 'Authorization': `Bearer ${session.access_token}` },
+        })
+        if (res.ok) {
+          const json = await res.json()
+          setTales(json.tales || [])
+        }
+      } catch (e) { /* tales are optional here */ }
+
       setLoading(false)
     }
     loadData()
@@ -92,6 +105,29 @@ export default function DashboardPage() {
     const url = URL.createObjectURL(blob)
     window.open(url, '_blank')
   }
+
+  // Opens a tale's picture-book PDF in a new tab
+  async function openTale(tale) {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) { window.location.href = '/login'; return }
+
+    const res = await fetch(`${API_URL}/tale-pdf/${tale.id}`, {
+      headers: { 'Authorization': `Bearer ${session.access_token}` },
+    })
+    if (!res.ok) {
+      alert('Could not open the tale. Please try again in a moment.')
+      return
+    }
+    const blob = await res.blob()
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank')
+  }
+
+  // Studies + tales merged, newest first
+  const items = [
+    ...studies.map(s => ({ ...s, kind: 'study' })),
+    ...tales.map(t => ({ ...t, kind: 'tale' })),
+  ].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
 
   return (
     <main style={{ minHeight: '100vh', background: CREAM, fontFamily: 'Georgia, serif' }}>
@@ -134,7 +170,8 @@ export default function DashboardPage() {
             My Studies
           </h1>
           <p style={{ color: GRAY, fontSize: '15px' }}>
-            {user?.email} · {studies.length} unit {studies.length === 1 ? 'study' : 'studies'} generated
+            {user?.email} · {studies.length} unit {studies.length === 1 ? 'study' : 'studies'}
+            {tales.length > 0 && ` · ${tales.length} ${tales.length === 1 ? 'tale' : 'tales'}`}
           </p>
         </div>
 
@@ -144,7 +181,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {!loading && studies.length === 0 && (
+        {!loading && items.length === 0 && (
           <div style={{
             textAlign: 'center', padding: '64px 48px',
             background: 'white', borderRadius: '20px', border: `1px solid ${BORDER}`,
@@ -162,35 +199,51 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {!loading && studies.length > 0 && (
+        {!loading && items.length > 0 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {studies.map(study => (
-              <div key={study.id} style={{
+            {items.map(item => (
+              <div key={`${item.kind}-${item.id}`} style={{
                 background: 'white', borderRadius: '16px', padding: '24px',
                 border: `1px solid ${BORDER}`,
                 display: 'flex', justifyContent: 'space-between',
                 alignItems: 'flex-start', gap: '16px',
               }}>
                 <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                    <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1A1A1A' }}>{study.theme}</h3>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', flexWrap: 'wrap' }}>
+                    <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1A1A1A' }}>
+                      {item.kind === 'tale' ? (item.title || item.theme) : item.theme}
+                    </h3>
+                    {item.kind === 'tale' && (
+                      <span style={{
+                        background: '#FDF3E0', color: '#9A6A1B',
+                        padding: '2px 10px', borderRadius: '100px',
+                        fontSize: '12px', fontWeight: 600,
+                      }}>
+                        📖 Tale
+                      </span>
+                    )}
                     <span style={{
-                      background: study.language === 'Español' ? '#E8EAF6' : '#E8F7F2',
-                      color: study.language === 'Español' ? '#283593' : GREEN,
+                      background: item.language === 'Español' ? '#E8EAF6' : '#E8F7F2',
+                      color: item.language === 'Español' ? '#283593' : GREEN,
                       padding: '2px 10px', borderRadius: '100px',
                       fontSize: '12px', fontWeight: 600,
                     }}>
-                      {study.language}
+                      {item.language}
                     </span>
                   </div>
-                  {study.creative_angle && (
+                  {item.kind === 'tale' && item.title && item.theme && (
                     <p style={{ color: GRAY, fontSize: '13px', fontStyle: 'italic', marginBottom: '10px', lineHeight: 1.5 }}>
-                      "{study.creative_angle}"
+                      "{item.theme}"
                     </p>
                   )}
-                  {study.subjects && (
+                  {item.kind === 'study' && item.creative_angle && (
+                    <p style={{ color: GRAY, fontSize: '13px', fontStyle: 'italic', marginBottom: '10px', lineHeight: 1.5 }}>
+                      "{item.creative_angle}"
+                    </p>
+                  )}
+                  {item.kind === 'study' && item.subjects && (
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '10px' }}>
-                      {study.subjects.map(s => (
+                      {item.subjects.map(s => (
                         <span key={s} style={{
                           background: CREAM, color: GRAY,
                           padding: '3px 10px', borderRadius: '100px', fontSize: '12px',
@@ -200,14 +253,14 @@ export default function DashboardPage() {
                       ))}
                     </div>
                   )}
-                  <p style={{ color: GRAY, fontSize: '12px' }}>{formatDate(study.created_at)}</p>
+                  <p style={{ color: GRAY, fontSize: '12px' }}>{formatDate(item.created_at)}</p>
                 </div>
 
                 {/* PDF BUTTON — opens the designed PDF in a new tab */}
                 <button
-                  onClick={() => downloadPDF(study)}
+                  onClick={() => item.kind === 'tale' ? openTale(item) : downloadPDF(item)}
                   style={{
-                    background: DARK, color: 'white',
+                    background: item.kind === 'tale' ? GREEN : DARK, color: 'white',
                     padding: '12px 20px', borderRadius: '12px',
                     border: 'none', fontSize: '13px', fontWeight: 700,
                     cursor: 'pointer', fontFamily: 'Georgia, serif',
@@ -215,10 +268,8 @@ export default function DashboardPage() {
                     alignItems: 'center', gap: '6px',
                     boxShadow: '0 2px 8px rgba(8,80,65,0.2)',
                   }}
-                  onMouseEnter={e => e.currentTarget.style.background = '#063d31'}
-                  onMouseLeave={e => e.currentTarget.style.background = DARK}
                 >
-                  📄 View PDF
+                  {item.kind === 'tale' ? '📖 Read Tale' : '📄 View PDF'}
                 </button>
               </div>
             ))}
