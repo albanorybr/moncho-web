@@ -94,7 +94,7 @@ export default function Home() {
           margin: '0 auto 48px',
           fontFamily: 'Georgia, serif',
         }}>
-          Moncho generates complete, print-ready unit studies tailored to your child&apos;s age, interests, and learning style. In English or Spanish. In minutes.
+          Moncho generates hands-on, print-ready unit study guides tailored to your child&apos;s age, interests, and learning style. In English or Spanish. In minutes.
         </p>
 
         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -124,6 +124,34 @@ export default function Home() {
           }}>
             See how it works
           </a>
+        </div>
+
+        {/* WHAT MONCHO IS (AND ISN'T) */}
+        <div style={{
+          maxWidth: '640px',
+          margin: '56px auto 0',
+          background: '#E8F7F2',
+          border: '1px solid #C9EBDD',
+          borderRadius: '20px',
+          padding: '28px 32px',
+          textAlign: 'center',
+        }}>
+          <p style={{
+            fontSize: '17px',
+            fontWeight: 700,
+            color: '#085041',
+            marginBottom: '10px',
+          }}>
+            Not a curriculum. Not worksheets. No answer key.
+          </p>
+          <p style={{
+            fontSize: '16px',
+            color: '#5F5E5A',
+            lineHeight: 1.7,
+            margin: 0,
+          }}>
+            Every Moncho study is a guide full of ideas, challenges, and paths to explore — your child finds the answers by doing. <strong style={{ color: '#1D9E75' }}>AI plans. Kids DO.</strong>
+          </p>
         </div>
       </section>
 
@@ -484,6 +512,80 @@ export default function Home() {
         </div>
       </section>
 
+      {/* PHILOSOPHY FAQ */}
+      <section style={{ padding: '100px 48px', background: '#F7F4EF' }}>
+        <div style={{ maxWidth: '760px', margin: '0 auto' }}>
+          <h2 style={{
+            fontSize: '42px',
+            fontWeight: 700,
+            color: '#1A1A1A',
+            letterSpacing: '-1px',
+            marginBottom: '16px',
+            textAlign: 'center',
+          }}>
+            Good questions, curious parents 💭
+          </h2>
+          <p style={{
+            color: '#5F5E5A',
+            fontSize: '18px',
+            textAlign: 'center',
+            marginBottom: '56px',
+          }}>
+            What Moncho is — and what it isn&apos;t.
+          </p>
+
+          {[
+            {
+              q: 'Does it come with the answers?',
+              a: <>Nope — and it&apos;s on purpose. 😉 A Moncho unit study is an <strong>idea guide</strong>: it proposes themes, challenges, and paths to explore one topic through every subject. There&apos;s no answer key hiding on the last page — because the answers aren&apos;t ours to give. Curious minds don&apos;t need answers handed to them; they need something worth investigating. Your child finds the answers by building, experimenting, asking, and discovering. That&apos;s the whole adventure.</>,
+            },
+            {
+              q: 'Is Moncho a curriculum?',
+              a: <>No. A curriculum tells you what to learn, in what order, by what date. Moncho hands you a map with lots of trails — you and your child pick which ones to follow, skip, or invent along the way. Use one challenge or twenty. There&apos;s no falling behind, because there&apos;s no schedule to fall behind on.</>,
+            },
+            {
+              q: 'Are these worksheets?',
+              a: <>Not even close. You won&apos;t find fill-in-the-blanks here. You&apos;ll find challenges: build it, test it, draw it, measure it, tell its story. If it can be done sitting still with a pencil only… we probably didn&apos;t include it.</>,
+            },
+          ].map(item => (
+            <div key={item.q} style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '32px 36px',
+              marginBottom: '16px',
+              border: '1px solid #E8E4DC',
+            }}>
+              <p style={{
+                fontWeight: 700,
+                fontSize: '19px',
+                marginBottom: '12px',
+                color: '#1A1A1A',
+              }}>
+                {item.q}
+              </p>
+              <p style={{
+                color: '#5F5E5A',
+                fontSize: '16px',
+                lineHeight: 1.7,
+                margin: 0,
+              }}>
+                {item.a}
+              </p>
+            </div>
+          ))}
+
+          <p style={{
+            textAlign: 'center',
+            marginTop: '40px',
+            fontSize: '20px',
+            fontWeight: 700,
+            color: '#1D9E75',
+          }}>
+            AI plans. Kids DO. 🚀
+          </p>
+        </div>
+      </section>
+
       {/* CTA */}
       <section style={{
         background: '#085041',
@@ -501,7 +603,7 @@ export default function Home() {
           color: 'rgba(255,255,255,0.7)',
           fontSize: '20px',
           marginBottom: '48px',
-        }}>Generate your first unit study in under 2 minutes. Free.</p>
+        }}>Your first idea guide is minutes away. Free.</p>
         <a href="/generate" style={{
           background: '#1D9E75',
           color: 'white',
