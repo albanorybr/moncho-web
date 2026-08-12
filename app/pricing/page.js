@@ -368,7 +368,11 @@ export default function PricingPage() {
           {[
             {
               q: 'What is a unit study?',
-              a: 'A unit study is a hands-on learning guide that explores one theme across multiple subjects — science, math, art, and more. Perfect for homeschooling and unschooling families.',
+              a: 'A Moncho unit study is a hands-on idea guide that explores one theme across multiple subjects — science, math, art, and more. It proposes challenges and paths to investigate, build, and discover. Perfect for homeschooling and unschooling families.',
+            },
+            {
+              q: 'Does it come with answers or worksheets?',
+              a: 'No — and it\'s on purpose. 😉 Moncho studies aren\'t a curriculum or worksheets, and there\'s no answer key. They\'re ideas for curious minds: your child finds the answers by building, experimenting, and exploring. AI plans. Kids DO.',
             },
             {
               q: 'What are Living Book Tales?',
