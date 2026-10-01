@@ -21,6 +21,34 @@ const PHILOSOPHIES = [
   { id: 'unschooling', emoji: '🌎', label: 'Unschooling', desc: 'Child-led, interest-based, no fixed curriculum' },
 ]
 
+// Optional country. `id` is stable (saved in localStorage); the label follows
+// the study language chosen above. 'other' reveals a free-text input.
+const COUNTRIES = [
+  { id: 'Guatemala', es: 'Guatemala', en: 'Guatemala' },
+  { id: 'Mexico', es: 'México', en: 'Mexico' },
+  { id: 'El Salvador', es: 'El Salvador', en: 'El Salvador' },
+  { id: 'Honduras', es: 'Honduras', en: 'Honduras' },
+  { id: 'Nicaragua', es: 'Nicaragua', en: 'Nicaragua' },
+  { id: 'Costa Rica', es: 'Costa Rica', en: 'Costa Rica' },
+  { id: 'Panama', es: 'Panamá', en: 'Panama' },
+  { id: 'Colombia', es: 'Colombia', en: 'Colombia' },
+  { id: 'Venezuela', es: 'Venezuela', en: 'Venezuela' },
+  { id: 'Ecuador', es: 'Ecuador', en: 'Ecuador' },
+  { id: 'Peru', es: 'Perú', en: 'Peru' },
+  { id: 'Bolivia', es: 'Bolivia', en: 'Bolivia' },
+  { id: 'Chile', es: 'Chile', en: 'Chile' },
+  { id: 'Argentina', es: 'Argentina', en: 'Argentina' },
+  { id: 'Uruguay', es: 'Uruguay', en: 'Uruguay' },
+  { id: 'Paraguay', es: 'Paraguay', en: 'Paraguay' },
+  { id: 'Dominican Republic', es: 'República Dominicana', en: 'Dominican Republic' },
+  { id: 'Puerto Rico', es: 'Puerto Rico', en: 'Puerto Rico' },
+  { id: 'Cuba', es: 'Cuba', en: 'Cuba' },
+  { id: 'Spain', es: 'España', en: 'Spain' },
+  { id: 'United States', es: 'Estados Unidos', en: 'United States' },
+  { id: 'Canada', es: 'Canadá', en: 'Canada' },
+]
+const COUNTRY_KEY = 'moncho_country'
+
 const SUBJECTS = [
   { id: 'Science', emoji: '🔬', color: '#1D9E75' },
   { id: 'Biology', emoji: '🧬', color: '#2E7D32' },
@@ -86,6 +114,8 @@ export default function GeneratorPage() {
     philosophy: 'moncho',
     learning_style: 'moncho',
     parent_note: '',
+    country: '',
+    countryOther: '',
     subjects_available: [],
   })
 
@@ -131,6 +161,28 @@ export default function GeneratorPage() {
     checkAuth()
   }, [])
 
+  // Remember the last country so families don't re-pick it every time.
+  // Read after mount (not in useState) to avoid an SSR hydration mismatch.
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(COUNTRY_KEY) || 'null')
+      if (saved && typeof saved.country === 'string') {
+        setForm(f => ({
+          ...f,
+          country: saved.country,
+          countryOther: typeof saved.countryOther === 'string' ? saved.countryOther : '',
+        }))
+      }
+    } catch {}
+  }, [])
+
+  function updateCountry(country, countryOther) {
+    setForm(f => ({ ...f, country, countryOther }))
+    try {
+      localStorage.setItem(COUNTRY_KEY, JSON.stringify({ country, countryOther }))
+    } catch {}
+  }
+
   function toggleSubject(id) {
     setForm(f => ({
       ...f,
@@ -150,8 +202,16 @@ export default function GeneratorPage() {
     setProgress([])
     setResult(null)
 
+    // Country is optional: '' = not specified (the API treats it as absent).
+    const { country, countryOther, ...rest } = form
+    const isEs = form.language === 'Español'
+    const countryLabel = country === 'other'
+      ? countryOther.trim()
+      : (COUNTRIES.find(c => c.id === country)?.[isEs ? 'es' : 'en'] || '')
+
     const payload = {
-      ...form,
+      ...rest,
+      country: countryLabel,
       age: form.age_range,
       learning_style: form.philosophy,
       subjects_available: form.mode === 'custom'
@@ -370,6 +430,52 @@ export default function GeneratorPage() {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* COUNTRY (optional) */}
+          <div>
+            <label htmlFor="country" style={{ display: 'block', fontWeight: 700, marginBottom: '6px', fontSize: '15px' }}>
+              📍 {form.language === 'Español' ? 'País (opcional)' : 'Country (optional)'}
+            </label>
+            <p style={{ color: GRAY, fontSize: '13px', marginBottom: '12px' }}>
+              {form.language === 'Español'
+                ? 'Para agregar ejemplos de tu país'
+                : 'To add examples from your country'}
+            </p>
+            <select
+              id="country"
+              value={form.country}
+              onChange={e => updateCountry(e.target.value, form.countryOther)}
+              style={{
+                width: '100%', padding: '14px 16px', borderRadius: '12px',
+                border: `2px solid ${BORDER}`, fontSize: '16px',
+                fontFamily: 'Georgia, serif', background: 'white',
+                outline: 'none', boxSizing: 'border-box',
+              }}
+            >
+              <option value="">{form.language === 'Español' ? 'Sin especificar' : 'Not specified'}</option>
+              {COUNTRIES.map(c => (
+                <option key={c.id} value={c.id}>{form.language === 'Español' ? c.es : c.en}</option>
+              ))}
+              <option value="other">{form.language === 'Español' ? 'Otro' : 'Other'}</option>
+            </select>
+            {form.country === 'other' && (
+              <input
+                type="text"
+                maxLength={40}
+                placeholder={form.language === 'Español' ? 'Escribe tu país' : 'Type your country'}
+                value={form.countryOther}
+                onChange={e => updateCountry('other', e.target.value)}
+                style={{
+                  width: '100%', padding: '12px 16px', borderRadius: '12px', marginTop: '10px',
+                  border: `2px solid ${BORDER}`, fontSize: '16px',
+                  fontFamily: 'Georgia, serif', background: 'white',
+                  outline: 'none', boxSizing: 'border-box',
+                }}
+                onFocus={e => e.target.style.borderColor = GREEN}
+                onBlur={e => e.target.style.borderColor = BORDER}
+              />
+            )}
           </div>
 
           {/* LEARNING PHILOSOPHY */}
