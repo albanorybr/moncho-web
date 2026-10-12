@@ -11,15 +11,8 @@ const CREAM = '#F7F4EF'
 const BORDER = '#E8E4DC'
 const GRAY = '#5F5E5A'
 
-const AGE_RANGES = [
-  { id: '5-7', label: '🌱 5-7 years' },
-  { id: '7-11', label: '📚 7-11 years' },
-  { id: '12-18', label: '🎓 12-18 years' },
-]
-
 export default function TalesPage() {
   const [theme, setTheme] = useState('')
-  const [age, setAge] = useState('7-11')
   const [language, setLanguage] = useState('English')
   const [status, setStatus] = useState('idle')
   const [progress, setProgress] = useState([])
@@ -71,7 +64,7 @@ export default function TalesPage() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${session.access_token}`,
         },
-        body: JSON.stringify({ theme, age, language }),
+        body: JSON.stringify({ theme, language }),
       })
       if (res.status === 403) {
         const d = await res.json()
@@ -198,21 +191,6 @@ export default function TalesPage() {
               fontFamily: 'Georgia, serif', boxSizing: 'border-box', marginBottom: '20px',
             }}
           />
-
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '20px' }}>
-            {AGE_RANGES.map(a => (
-              <button key={a.id} onClick={() => setAge(a.id)} disabled={isPro === false} style={{
-                padding: '10px 18px', borderRadius: '100px', cursor: 'pointer',
-                border: `2px solid ${age === a.id ? GREEN : BORDER}`,
-                background: age === a.id ? '#E8F7F2' : 'white',
-                color: age === a.id ? DARK : GRAY,
-                fontWeight: age === a.id ? 700 : 400,
-                fontSize: '14px', fontFamily: 'Georgia, serif',
-              }}>
-                {a.label}
-              </button>
-            ))}
-          </div>
 
           <div style={{ display: 'flex', gap: '10px', marginBottom: '24px' }}>
             {['English', 'Español'].map(lang => (
