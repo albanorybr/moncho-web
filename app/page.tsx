@@ -490,7 +490,7 @@ export default function Home() {
               <div style={{ fontSize: '18px', fontWeight: 700, color: 'white', marginBottom: '8px' }}>Pro</div>
               <div style={{ fontSize: '48px', fontWeight: 700, color: 'white', marginBottom: '4px' }}>$9</div>
               <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '15px', marginBottom: '32px' }}>per month</div>
-              {['Unlimited unit studies', '📖 10 Living Book Tales/month', 'All modes & styles', 'All 12 subjects', 'English & Spanish', 'PDF download', 'Study history'].map(f => (
+              {['Unlimited unit studies', '📖 10 Living Book Tales/month', 'All modes (Mini, Full, Custom)', 'All 12 subjects', 'English & Spanish', 'PDF download', 'Study history'].map(f => (
                 <div key={f} style={{ display: 'flex', gap: '10px', marginBottom: '12px', fontSize: '16px', color: 'white' }}>
                   <span style={{ color: 'rgba(255,255,255,0.8)' }}>✓</span> {f}
                 </div>
