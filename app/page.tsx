@@ -94,7 +94,7 @@ export default function Home() {
           margin: '0 auto 48px',
           fontFamily: 'Georgia, serif',
         }}>
-          Moncho generates hands-on, print-ready unit study guides tailored to your child&apos;s age, interests, and learning style. In English or Spanish. In minutes.
+          Moncho generates hands-on, print-ready unit study guides tailored to your child&apos;s age and interests. In English or Spanish. In minutes.
         </p>
 
         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -349,7 +349,7 @@ export default function Home() {
           }}>
             {[
               { num: '01', title: 'Choose a theme', desc: 'Enter any topic your child is curious about — Bees, Ancient Egypt, Zelda, Space, Cooking. Anything goes.' },
-              { num: '02', title: 'Customize', desc: 'Set the age, language (English or Spanish), subjects, and learning style. Or just hit generate with the defaults.' },
+              { num: '02', title: 'Customize', desc: 'Set the age, language (English or Spanish) and subjects. Or just hit generate with the defaults.' },
               { num: '03', title: 'Print & explore', desc: 'Download a beautiful, print-ready PDF. Hands-on challenges, step-by-step, with Make it Easier and Level it Up options.' },
             ].map(step => (
               <div key={step.num} style={{
@@ -490,7 +490,7 @@ export default function Home() {
               <div style={{ fontSize: '18px', fontWeight: 700, color: 'white', marginBottom: '8px' }}>Pro</div>
               <div style={{ fontSize: '48px', fontWeight: 700, color: 'white', marginBottom: '4px' }}>$9</div>
               <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '15px', marginBottom: '32px' }}>per month</div>
-              {['Unlimited unit studies', '📖 10 Living Book Tales/month', 'All modes & styles', 'All 12 subjects', 'English & Spanish', 'PDF download', 'Study history'].map(f => (
+              {['Unlimited unit studies', '📖 10 Living Book Tales/month', 'All modes (Mini, Full, Custom)', 'All 12 subjects', 'English & Spanish', 'PDF download', 'Study history'].map(f => (
                 <div key={f} style={{ display: 'flex', gap: '10px', marginBottom: '12px', fontSize: '16px', color: 'white' }}>
                   <span style={{ color: 'rgba(255,255,255,0.8)' }}>✓</span> {f}
                 </div>

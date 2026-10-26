@@ -12,15 +12,6 @@ const AGE_RANGES = [
   { id: '15-18', label: '🎓 High School', desc: '15-18 years' },
 ]
 
-const PHILOSOPHIES = [
-  { id: 'moncho', emoji: '🐱', label: 'Moncho Style', desc: 'Hands-on, curiosity-driven, project-based' },
-  { id: 'montessori', emoji: '🌱', label: 'Montessori', desc: 'Child-led, self-paced, prepared environment' },
-  { id: 'charlotte_mason', emoji: '📖', label: 'Charlotte Mason', desc: 'Living books, narration, nature study' },
-  { id: 'waldorf', emoji: '🌿', label: 'Waldorf', desc: 'Artistic, imaginative, developmental stages' },
-  { id: 'forest_school', emoji: '🌲', label: 'Forest School', desc: 'Outdoor learning, nature connection' },
-  { id: 'unschooling', emoji: '🌎', label: 'Unschooling', desc: 'Child-led, interest-based, no fixed curriculum' },
-]
-
 const SUBJECTS = [
   { id: 'Science', emoji: '🔬', color: '#1D9E75' },
   { id: 'Biology', emoji: '🧬', color: '#2E7D32' },
@@ -83,7 +74,6 @@ export default function GeneratorPage() {
     language: 'English',
     mode: 'mini',
     depth: 'light',
-    philosophy: 'moncho',
     learning_style: 'moncho',
     parent_note: '',
     subjects_available: [],
@@ -153,7 +143,7 @@ export default function GeneratorPage() {
     const payload = {
       ...form,
       age: form.age_range,
-      learning_style: form.philosophy,
+      learning_style: 'moncho',
       subjects_available: form.mode === 'custom'
         ? form.subjects_available
         : SUBJECTS.map(s => s.id),
@@ -367,40 +357,6 @@ export default function GeneratorPage() {
                   fontSize: '15px', fontFamily: 'Georgia, serif',
                 }}>
                   {lang === 'English' ? '🇺🇸 English' : '🇬🇹 Español'}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* LEARNING PHILOSOPHY */}
-          <div>
-            <label style={{ display: 'block', fontWeight: 700, marginBottom: '6px', fontSize: '15px' }}>
-              🧭 Learning Philosophy
-            </label>
-            <p style={{ color: GRAY, fontSize: '13px', marginBottom: '12px' }}>
-              Choose the educational approach that resonates with your family.
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {PHILOSOPHIES.map(p => (
-                <button key={p.id} onClick={() => setForm(f => ({ ...f, philosophy: p.id }))} style={{
-                  padding: '12px 16px', borderRadius: '12px', cursor: 'pointer',
-                  border: `2px solid ${form.philosophy === p.id ? GREEN : BORDER}`,
-                  background: form.philosophy === p.id ? '#E8F7F2' : 'white',
-                  fontFamily: 'Georgia, serif', textAlign: 'left',
-                  display: 'flex', alignItems: 'center', gap: '12px',
-                }}>
-                  <span style={{ fontSize: '20px' }}>{p.emoji}</span>
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: '14px', color: form.philosophy === p.id ? DARK : '#1A1A1A' }}>
-                      {p.label}
-                      {p.id === 'moncho' && (
-                        <span style={{ fontSize: '11px', background: GREEN, color: 'white', padding: '2px 8px', borderRadius: '20px', marginLeft: '6px' }}>
-                          RECOMMENDED
-                        </span>
-                      )}
-                    </div>
-                    <div style={{ fontSize: '12px', color: GRAY, marginTop: '2px' }}>{p.desc}</div>
-                  </div>
                 </button>
               ))}
             </div>
