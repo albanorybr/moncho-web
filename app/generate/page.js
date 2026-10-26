@@ -13,12 +13,10 @@ const AGE_RANGES = [
 ]
 
 const PHILOSOPHIES = [
-  { id: 'moncho', emoji: '🐱', label: 'Moncho Style', desc: 'Hands-on, curiosity-driven, project-based' },
-  { id: 'montessori', emoji: '🌱', label: 'Montessori', desc: 'Child-led, self-paced, prepared environment' },
-  { id: 'charlotte_mason', emoji: '📖', label: 'Charlotte Mason', desc: 'Living books, narration, nature study' },
-  { id: 'waldorf', emoji: '🌿', label: 'Waldorf', desc: 'Artistic, imaginative, developmental stages' },
-  { id: 'forest_school', emoji: '🌲', label: 'Forest School', desc: 'Outdoor learning, nature connection' },
-  { id: 'unschooling', emoji: '🌎', label: 'Unschooling', desc: 'Child-led, interest-based, no fixed curriculum' },
+  { id: 'moncho', emoji: '🐱', label: 'Moncho Style', desc: 'Hands-on missions with real numbers, real places and things to build' },
+  { id: 'forest_school', emoji: '🌲', label: 'Outdoor Explorer', inspired: 'Forest School', desc: 'Backyard, park and nature missions — with safety tips and a no-yard backup' },
+  { id: 'charlotte_mason', emoji: '📖', label: 'Living Books', inspired: 'Charlotte Mason', desc: 'One real book for the whole unit, narration after every challenge, nature journaling' },
+  { id: 'waldorf', emoji: '🕯️', label: 'Story-Led', inspired: 'Waldorf', desc: 'Every subject opens with a story. Clay, watercolor and wool — no screens' },
 ]
 
 const SUBJECTS = [
@@ -375,10 +373,10 @@ export default function GeneratorPage() {
           {/* LEARNING PHILOSOPHY */}
           <div>
             <label style={{ display: 'block', fontWeight: 700, marginBottom: '6px', fontSize: '15px' }}>
-              🧭 Learning Philosophy
+              🧭 Style
             </label>
             <p style={{ color: GRAY, fontSize: '13px', marginBottom: '12px' }}>
-              Choose the educational approach that resonates with your family.
+              Every style is a Moncho unit study. Pick the flavor that fits your family.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {PHILOSOPHIES.map(p => (
@@ -399,6 +397,11 @@ export default function GeneratorPage() {
                         </span>
                       )}
                     </div>
+                    {p.inspired && (
+                      <div style={{ fontSize: '11px', color: GREEN, marginTop: '2px', fontStyle: 'italic' }}>
+                        Inspired by {p.inspired}
+                      </div>
+                    )}
                     <div style={{ fontSize: '12px', color: GRAY, marginTop: '2px' }}>{p.desc}</div>
                   </div>
                 </button>
