@@ -94,7 +94,7 @@ export default function Home() {
           margin: '0 auto 48px',
           fontFamily: 'Georgia, serif',
         }}>
-          Moncho generates hands-on, print-ready unit study guides tailored to your child&apos;s age, interests, and learning style. In English or Spanish. In minutes.
+          Moncho generates hands-on, print-ready unit study guides tailored to your child&apos;s age and interests. In English or Spanish. In minutes.
         </p>
 
         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -349,7 +349,7 @@ export default function Home() {
           }}>
             {[
               { num: '01', title: 'Choose a theme', desc: 'Enter any topic your child is curious about — Bees, Ancient Egypt, Zelda, Space, Cooking. Anything goes.' },
-              { num: '02', title: 'Customize', desc: 'Set the age, language (English or Spanish), subjects, and learning style. Or just hit generate with the defaults.' },
+              { num: '02', title: 'Customize', desc: 'Set the age, language (English or Spanish) and subjects. Or just hit generate with the defaults.' },
               { num: '03', title: 'Print & explore', desc: 'Download a beautiful, print-ready PDF. Hands-on challenges, step-by-step, with Make it Easier and Level it Up options.' },
             ].map(step => (
               <div key={step.num} style={{

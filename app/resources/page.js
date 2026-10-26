@@ -511,7 +511,7 @@ export default function ResourcesPage() {
           </h3>
           <p style={{ fontSize: '14px', color: GRAY, marginBottom: '20px', lineHeight: 1.6, maxWidth: '400px', margin: '0 auto 20px' }}>
             Generate a unit study and Moncho will suggest specific books and materials
-            tailored to your child's theme, age, and learning philosophy.
+            tailored to your child's theme and age.
           </p>
           <a href="/generate" style={{
             display: 'inline-block', background: GREEN, color: 'white',

@@ -12,15 +12,6 @@ const AGE_RANGES = [
   { id: '15-18', label: '🎓 High School', desc: '15-18 years' },
 ]
 
-// v5: every unit is Moncho Style. A flavor is OPTIONAL — it turns the
-// first challenge of each subject into a flavor challenge.
-const FLAVORS = [
-  { id: '', emoji: '🐱', label: 'No flavor', desc: 'Pure Moncho Style — every challenge is a hands-on Moncho mission' },
-  { id: 'outdoor', emoji: '🌲', label: 'Outdoor Explorer', inspired: 'Forest School', desc: 'First challenge of each subject happens outside — with a no-yard backup and safety tips' },
-  { id: 'living_books', emoji: '📖', label: 'Living Books', inspired: 'Charlotte Mason', desc: 'One real book for the unit; first challenge of each subject is read, do, narrate' },
-  { id: 'story', emoji: '🕯️', label: 'Story-Led', inspired: 'Waldorf', desc: 'First challenge of each subject opens with a short story and uses natural materials' },
-]
-
 const SUBJECTS = [
   { id: 'Science', emoji: '🔬', color: '#1D9E75' },
   { id: 'Biology', emoji: '🧬', color: '#2E7D32' },
@@ -83,7 +74,6 @@ export default function GeneratorPage() {
     language: 'English',
     mode: 'mini',
     depth: 'light',
-    flavor: '',
     learning_style: 'moncho',
     parent_note: '',
     subjects_available: [],
@@ -154,7 +144,6 @@ export default function GeneratorPage() {
       ...form,
       age: form.age_range,
       learning_style: 'moncho',
-      flavor: form.flavor,
       subjects_available: form.mode === 'custom'
         ? form.subjects_available
         : SUBJECTS.map(s => s.id),
@@ -368,60 +357,6 @@ export default function GeneratorPage() {
                   fontSize: '15px', fontFamily: 'Georgia, serif',
                 }}>
                   {lang === 'English' ? '🇺🇸 English' : '🇬🇹 Español'}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* STYLE: Moncho always on + optional flavor */}
-          <div>
-            <label style={{ display: 'block', fontWeight: 700, marginBottom: '6px', fontSize: '15px' }}>
-              🧭 Style
-            </label>
-            <div style={{
-              padding: '12px 16px', borderRadius: '12px', border: `2px solid ${GREEN}`,
-              background: '#E8F7F2', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px',
-            }}>
-              <span style={{ fontSize: '20px' }}>🐱</span>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: '14px', color: DARK }}>
-                  Moncho Style
-                  <span style={{ fontSize: '11px', background: GREEN, color: 'white', padding: '2px 8px', borderRadius: '20px', marginLeft: '6px' }}>
-                    ALWAYS ON
-                  </span>
-                </div>
-                <div style={{ fontSize: '12px', color: GRAY, marginTop: '2px' }}>
-                  Hands-on missions with real numbers, real places and things to build.
-                </div>
-              </div>
-            </div>
-            <label style={{ display: 'block', fontWeight: 700, marginBottom: '6px', fontSize: '14px' }}>
-              ✨ Add a flavor <span style={{ fontWeight: 400, color: GRAY }}>(optional)</span>
-            </label>
-            <p style={{ color: GRAY, fontSize: '13px', marginBottom: '12px' }}>
-              The first challenge of each subject gets the flavor, in its own colored box.
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {FLAVORS.map(p => (
-                <button key={p.id || 'none'} onClick={() => setForm(f => ({ ...f, flavor: p.id }))} style={{
-                  padding: '12px 16px', borderRadius: '12px', cursor: 'pointer',
-                  border: `2px solid ${form.flavor === p.id ? GREEN : BORDER}`,
-                  background: form.flavor === p.id ? '#E8F7F2' : 'white',
-                  fontFamily: 'Georgia, serif', textAlign: 'left',
-                  display: 'flex', alignItems: 'center', gap: '12px',
-                }}>
-                  <span style={{ fontSize: '20px' }}>{p.emoji}</span>
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: '14px', color: form.flavor === p.id ? DARK : '#1A1A1A' }}>
-                      {p.label}
-                    </div>
-                    {p.inspired && (
-                      <div style={{ fontSize: '11px', color: GREEN, marginTop: '2px', fontStyle: 'italic' }}>
-                        Inspired by {p.inspired}
-                      </div>
-                    )}
-                    <div style={{ fontSize: '12px', color: GRAY, marginTop: '2px' }}>{p.desc}</div>
-                  </div>
                 </button>
               ))}
             </div>
