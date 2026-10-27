@@ -12,6 +12,11 @@ const AGE_RANGES = [
   { id: '15-18', label: '🎓 High School', desc: '15-18 years' },
 ]
 
+// Ages 5-7: units stay short and playful — no Full mode, Custom capped.
+const EARLY_AGE = '5-7'
+const EARLY_MAX_SUBJECTS = 5
+const EARLY_NOTE = 'For ages 5–7 we keep units short and playful — choose Mini or Custom.'
+
 const SUBJECTS = [
   { id: 'Science', emoji: '🔬', color: '#1D9E75' },
   { id: 'Biology', emoji: '🧬', color: '#2E7D32' },
@@ -121,13 +126,32 @@ export default function GeneratorPage() {
     checkAuth()
   }, [])
 
+  const isEarly = form.age_range === EARLY_AGE
+
   function toggleSubject(id) {
-    setForm(f => ({
-      ...f,
-      subjects_available: f.subjects_available.includes(id)
-        ? f.subjects_available.filter(s => s !== id)
-        : [...f.subjects_available, id],
-    }))
+    setForm(f => {
+      if (f.subjects_available.includes(id)) {
+        return { ...f, subjects_available: f.subjects_available.filter(s => s !== id) }
+      }
+      if (f.age_range === EARLY_AGE && f.subjects_available.length >= EARLY_MAX_SUBJECTS) {
+        return f // ages 5-7: max 5 subjects
+      }
+      return { ...f, subjects_available: [...f.subjects_available, id] }
+    })
+  }
+
+  function selectAge(id) {
+    setForm(f => {
+      if (id !== EARLY_AGE) return { ...f, age_range: id }
+      // switching to 5-7: Full → Mini, trim Custom to 5 subjects, light depth
+      return {
+        ...f,
+        age_range: id,
+        mode: f.mode === 'full' ? 'mini' : f.mode,
+        subjects_available: f.subjects_available.slice(0, EARLY_MAX_SUBJECTS),
+        depth: 'light',
+      }
+    })
   }
 
   async function handleGenerate() {
@@ -147,7 +171,7 @@ export default function GeneratorPage() {
       subjects_available: form.mode === 'custom'
         ? form.subjects_available
         : SUBJECTS.map(s => s.id),
-      depth: form.mode === 'custom' ? form.depth : 'light',
+      depth: form.mode === 'custom' && !isEarly ? form.depth : 'light',
     }
 
     try {
@@ -328,7 +352,7 @@ export default function GeneratorPage() {
             </label>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
               {AGE_RANGES.map(a => (
-                <button key={a.id} onClick={() => setForm(f => ({ ...f, age_range: a.id }))} style={{
+                <button key={a.id} onClick={() => selectAge(a.id)} style={{
                   padding: '12px 16px', borderRadius: '12px', cursor: 'pointer',
                   border: `2px solid ${form.age_range === a.id ? GREEN : BORDER}`,
                   background: form.age_range === a.id ? '#E8F7F2' : 'white',
@@ -375,18 +399,34 @@ export default function GeneratorPage() {
                 { id: 'mini', label: '⚡ Mini', desc: 'AI picks 3 best subjects' },
                 { id: 'full', label: '📦 Full', desc: 'AI picks up to 10 subjects' },
                 { id: 'custom', label: '🎛️ Custom', desc: 'You choose the subjects' },
-              ].map(m => (
-                <button key={m.id} onClick={() => setForm(f => ({ ...f, mode: m.id }))} style={{
-                  padding: '14px 12px', borderRadius: '12px', cursor: 'pointer',
-                  border: `2px solid ${form.mode === m.id ? GREEN : BORDER}`,
-                  background: form.mode === m.id ? '#E8F7F2' : 'white',
-                  fontFamily: 'Georgia, serif', textAlign: 'center',
-                }}>
-                  <div style={{ fontWeight: 700, fontSize: '14px', color: form.mode === m.id ? DARK : '#1A1A1A' }}>{m.label}</div>
-                  <div style={{ fontSize: '11px', color: GRAY, marginTop: '4px' }}>{m.desc}</div>
-                </button>
-              ))}
+              ].map(m => {
+                const off = isEarly && m.id === 'full'
+                return (
+                  <button key={m.id} disabled={off} title={off ? EARLY_NOTE : undefined}
+                    onClick={() => !off && setForm(f => ({ ...f, mode: m.id }))} style={{
+                    padding: '14px 12px', borderRadius: '12px',
+                    cursor: off ? 'not-allowed' : 'pointer', opacity: off ? 0.45 : 1,
+                    border: `2px solid ${form.mode === m.id ? GREEN : BORDER}`,
+                    background: form.mode === m.id ? '#E8F7F2' : 'white',
+                    fontFamily: 'Georgia, serif', textAlign: 'center',
+                  }}>
+                    <div style={{ fontWeight: 700, fontSize: '14px', color: form.mode === m.id ? DARK : '#1A1A1A' }}>{m.label}</div>
+                    <div style={{ fontSize: '11px', color: GRAY, marginTop: '4px' }}>
+                      {off ? 'Not for ages 5–7' : m.desc}
+                    </div>
+                  </button>
+                )
+              })}
             </div>
+            {isEarly && (
+              <p style={{
+                marginTop: '10px', padding: '10px 14px', borderRadius: '10px',
+                background: '#FFF8E6', border: '1px solid #F2DFA7',
+                color: '#6B5313', fontSize: '13px', lineHeight: 1.5,
+              }}>
+                🌱 {EARLY_NOTE}
+              </p>
+            )}
           </div>
 
           {/* SUBJECTS — only in Custom mode */}
@@ -396,14 +436,18 @@ export default function GeneratorPage() {
                 📋 Subjects to include
               </label>
               <p style={{ color: GRAY, fontSize: '13px', marginBottom: '12px' }}>
-                Select the subjects your child is most interested in exploring.
+                {isEarly
+                  ? `Pick up to ${EARLY_MAX_SUBJECTS} subjects (${form.subjects_available.length}/${EARLY_MAX_SUBJECTS}). Each one gets 2 playful challenges.`
+                  : 'Select the subjects your child is most interested in exploring.'}
               </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {SUBJECTS.map(s => {
                   const selected = form.subjects_available.includes(s.id)
+                  const full = isEarly && !selected && form.subjects_available.length >= EARLY_MAX_SUBJECTS
                   return (
-                    <button key={s.id} onClick={() => toggleSubject(s.id)} style={{
-                      padding: '8px 16px', borderRadius: '100px', cursor: 'pointer',
+                    <button key={s.id} onClick={() => toggleSubject(s.id)} disabled={full} style={{
+                      padding: '8px 16px', borderRadius: '100px',
+                      cursor: full ? 'not-allowed' : 'pointer', opacity: full ? 0.4 : 1,
                       border: `2px solid ${selected ? s.color : BORDER}`,
                       background: selected ? s.color + '22' : 'white',
                       color: selected ? s.color : GRAY,
@@ -416,7 +460,8 @@ export default function GeneratorPage() {
                 })}
               </div>
 
-              {/* Depth */}
+              {/* Depth — not offered for ages 5-7 (always 2 playful challenges) */}
+              {!isEarly && (
               <div style={{ marginTop: '20px' }}>
                 <label style={{ display: 'block', fontWeight: 700, marginBottom: '8px', fontSize: '15px' }}>
                   🎯 Depth per subject
@@ -440,6 +485,7 @@ export default function GeneratorPage() {
                   ))}
                 </div>
               </div>
+              )}
             </div>
           )}
 
