@@ -30,6 +30,7 @@ export default function Home() {
           🐱 Moncho
         </div>
         <div style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
+          <a href="/free" style={{ color: '#085041', textDecoration: 'none', fontSize: '15px', fontWeight: 600 }}>🎁 Free unit studies</a>
           <a href="/resources" style={{ color: '#5F5E5A', textDecoration: 'none', fontSize: '15px' }}>📚 Resources</a>
           <a href="/pricing" style={{ color: '#5F5E5A', textDecoration: 'none', fontSize: '15px' }}>Pricing</a>
           <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
@@ -644,6 +645,7 @@ export default function Home() {
         <div style={{ marginBottom: '8px', fontWeight: 600, color: '#1D9E75' }}>🐱 Moncho Unschooling</div>
         <div style={{ marginBottom: '16px' }}>By Alba Nory de González / Dicarba · monchounschooling.com</div>
         <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', fontSize: '13px' }}>
+          <a href="/free" style={{ color: '#5F5E5A', textDecoration: 'none' }}>Free unit studies</a>
           <a href="/terms" style={{ color: '#5F5E5A', textDecoration: 'none' }}>Terms of Service</a>
           <a href="/resources" style={{ color: '#5F5E5A', textDecoration: 'none' }}>Resources</a>
           <a href="/pricing" style={{ color: '#5F5E5A', textDecoration: 'none' }}>Pricing</a>
