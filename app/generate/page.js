@@ -36,6 +36,20 @@ const SUBJECTS = [
   { id: 'Technology', emoji: '💻', color: '#283593' },
 ]
 
+// Optional country: lets Moncho add local examples (places, currency, events).
+// value = what we send to the API; label = what the family sees.
+const COUNTRIES = [
+  'Guatemala', 'México', 'El Salvador', 'Honduras', 'Nicaragua', 'Costa Rica',
+  'Panamá', 'Colombia', 'Venezuela', 'Ecuador', 'Perú', 'Bolivia', 'Chile',
+  'Argentina', 'Uruguay', 'Paraguay', 'República Dominicana', 'Puerto Rico',
+  'Cuba', 'España',
+].map(c => ({ value: c, label: c })).concat([
+  { value: 'United States', label: 'Estados Unidos / United States' },
+  { value: 'Canada', label: 'Canadá / Canada' },
+])
+const OTHER_COUNTRY = 'Other'
+const COUNTRY_KEY = 'moncho_country'
+
 const GREEN = '#1D9E75'
 const DARK = '#085041'
 const CREAM = '#F7F4EF'
@@ -82,6 +96,8 @@ export default function GeneratorPage() {
     learning_style: 'moncho',
     parent_note: '',
     subjects_available: [],
+    country: '',
+    countryOther: '',
   })
 
   const [status, setStatus] = useState('idle')
@@ -124,7 +140,34 @@ export default function GeneratorPage() {
 
   useEffect(() => {
     checkAuth()
+    // Remember the family's country so they don't re-pick it every time
+    try {
+      const saved = window.localStorage.getItem(COUNTRY_KEY) || ''
+      if (saved) {
+        const known = COUNTRIES.some(c => c.value === saved)
+        setForm(f => known
+          ? { ...f, country: saved }
+          : { ...f, country: OTHER_COUNTRY, countryOther: saved })
+      }
+    } catch { /* storage blocked: just start empty */ }
   }, [])
+
+  function saveCountry(value) {
+    try {
+      if (value) window.localStorage.setItem(COUNTRY_KEY, value)
+      else window.localStorage.removeItem(COUNTRY_KEY)
+    } catch { /* storage blocked: ignore */ }
+  }
+
+  function selectCountry(value) {
+    setForm(f => ({ ...f, country: value }))
+    if (value !== OTHER_COUNTRY) saveCountry(value)
+  }
+
+  function typeOtherCountry(value) {
+    setForm(f => ({ ...f, countryOther: value }))
+    saveCountry(value.trim())
+  }
 
   const isEarly = form.age_range === EARLY_AGE
 
@@ -164,8 +207,10 @@ export default function GeneratorPage() {
     setProgress([])
     setResult(null)
 
+    const { countryOther, ...formFields } = form
     const payload = {
-      ...form,
+      ...formFields,
+      country: form.country === OTHER_COUNTRY ? countryOther.trim() : form.country,
       age: form.age_range,
       learning_style: 'moncho',
       subjects_available: form.mode === 'custom'
@@ -384,6 +429,47 @@ export default function GeneratorPage() {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* COUNTRY (optional) */}
+          <div>
+            <label htmlFor="country" style={{ display: 'block', fontWeight: 700, marginBottom: '4px', fontSize: '15px' }}>
+              📍 Country / País <span style={{ color: GRAY, fontWeight: 400 }}>(optional)</span>
+            </label>
+            <p style={{ color: GRAY, fontSize: '13px', marginBottom: '10px' }}>
+              To add examples from your country · Para agregar ejemplos de tu país
+            </p>
+            <select
+              id="country"
+              value={form.country}
+              onChange={e => selectCountry(e.target.value)}
+              style={{
+                width: '100%', padding: '12px 16px', borderRadius: '12px',
+                border: `2px solid ${form.country ? GREEN : BORDER}`, fontSize: '15px',
+                fontFamily: 'Georgia, serif', background: 'white',
+                boxSizing: 'border-box', cursor: 'pointer',
+              }}
+            >
+              <option value="">Not specified / Sin especificar</option>
+              {COUNTRIES.map(c => (
+                <option key={c.value} value={c.value}>{c.label}</option>
+              ))}
+              <option value={OTHER_COUNTRY}>Other / Otro</option>
+            </select>
+            {form.country === OTHER_COUNTRY && (
+              <input
+                type="text"
+                maxLength={40}
+                placeholder="Type your country · Escribe tu país"
+                value={form.countryOther}
+                onChange={e => typeOtherCountry(e.target.value)}
+                style={{
+                  marginTop: '10px', width: '100%', padding: '12px 16px',
+                  borderRadius: '12px', border: `2px solid ${BORDER}`, fontSize: '15px',
+                  fontFamily: 'Georgia, serif', background: 'white', boxSizing: 'border-box',
+                }}
+              />
+            )}
           </div>
 
           {/* MODE */}
