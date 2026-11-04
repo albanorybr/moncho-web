@@ -2,6 +2,7 @@
 
 import { supabase } from '../lib/supabase'
 import { useState, useEffect } from 'react'
+import { track } from '../lib/track'
 
 const API_URL = 'https://moncho-api-production-2c00.up.railway.app'
 
@@ -242,6 +243,7 @@ export default function GeneratorPage() {
         return
       }
       if (res.status === 403) {
+        track('free_limit_reached', { mode: form.mode, age_range: form.age_range })
         const d = await res.json()
         setError(d.message || '🌟 You have used your 2 free studies this month. Upgrade to Pro for unlimited studies!')
         setStatus('idle')
@@ -258,6 +260,7 @@ export default function GeneratorPage() {
       }
 
       setStatus('polling')
+      track('generate_start', { mode: form.mode, age_range: form.age_range, language: form.language })
 
       const poll = setInterval(async () => {
         try {
@@ -270,6 +273,7 @@ export default function GeneratorPage() {
             clearInterval(poll)
             setResult(statusData.result)
             setStatus('done')
+            track('unit_generated', { mode: form.mode, age_range: form.age_range, language: form.language })
             // The study is saved by the SERVER now (no browser insert).
             // Re-check the limit so the button disables honestly if this
             // was the 2nd free study.

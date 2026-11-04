@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { supabase } from '../lib/supabase'
+import { track } from '../lib/track'
 
 export default function LoginPage() {
   const [mode, setMode] = useState('login') // login | signup
@@ -27,6 +28,7 @@ export default function LoginPage() {
       if (error) {
         setError(error.message)
       } else {
+        track('sign_up', { method: 'email' })
         setMessage('✅ Account created! Check your email to confirm, then log in.')
       }
     } else {
@@ -34,6 +36,7 @@ export default function LoginPage() {
       if (error) {
         setError(error.message)
       } else {
+        track('login', { method: 'email' })
         window.location.href = '/generate'
       }
     }
